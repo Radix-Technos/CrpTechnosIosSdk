@@ -1,0 +1,23 @@
+framework module CRPSmartBand {
+    
+  explicit module minilzo_Private{
+      header "minilzo.h"
+      header "lzodefs.h"
+      header "lzoconf.h"
+      export *
+  }
+  
+  explicit module zipArchive_Public{
+      header "CRPSSZipArchive.h"
+      header "CRPSSZipCommon.h"
+      export *
+  }
+  
+}
+
+
+
+module CRPSmartBand.Swift {
+  header "CRPSmartBand-Swift.h"
+  requires objc
+}
