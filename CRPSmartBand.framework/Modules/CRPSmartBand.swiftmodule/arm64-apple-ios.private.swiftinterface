@@ -347,6 +347,10 @@ extension CRPSmartBand.CRPDownloadRequest {
   @objc optional func receiveRequestGPTAnswer()
   @objc optional func receiveRequestGPTPreviewImage(imageSize: CoreFoundation.CGSize)
   @objc optional func receiveRequestGPTImage()
+  @objc optional func receivePrayerAuxiliaryRequest()
+  @objc optional func receiveDeleteAllahName(id: Swift.Int)
+  @objc optional func receiveDeleteDuas(id: Swift.Int)
+  @objc optional func receiveSOS()
 }
 public enum CRPResult<Value> {
   case success(Value)
@@ -389,6 +393,14 @@ extension CRPSmartBand.CRPResult {
   public func ifSuccess(_ closure: () -> Swift.Void) -> CRPSmartBand.CRPResult<Value>
   @discardableResult
   public func ifFailure(_ closure: () -> Swift.Void) -> CRPSmartBand.CRPResult<Value>
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class CRPNapsSleep : ObjectiveC.NSObject {
+  @objc final public let startHour: Swift.Int
+  @objc final public let startMin: Swift.Int
+  @objc final public let endHour: Swift.Int
+  @objc final public let endMin: Swift.Int
+  @objc final public let totalMin: Swift.Int
+  @objc deinit
 }
 public func == (lhs: CRPSmartBand.CRPDiscovery, rhs: CRPSmartBand.CRPDiscovery) -> Swift.Bool
 @objc @objcMembers public class CRPDiscovery : ObjectiveC.NSObject {
@@ -1042,6 +1054,7 @@ extension CRPSmartBand.CRPSessionDelegate : Foundation.URLSessionStreamDelegate 
   @objc public func receiveRequestGPTAnswer()
   @objc public func receiveRequestGPTPreviewImage(imageSize: CoreFoundation.CGSize)
   @objc public func receiveRequestGPTImage()
+  @objc public func receiveSOS()
   @objc open func scan(_ duration: Foundation.TimeInterval = 3, progressHandler: CRPSmartBand.scanProgressHandler?, completionHandler: CRPSmartBand.scanCompletionHandler?)
   @objc open func interruptScan()
   @objc open func connet(_ discovery: CRPSmartBand.CRPDiscovery)
@@ -1247,6 +1260,7 @@ extension CRPSmartBand.CRPSessionDelegate : Foundation.URLSessionStreamDelegate 
   @objc open func getGPSDataRecordList()
   @objc open func getGPSRecordData(time: Swift.Int, _ handler: @escaping CRPSmartBand.gpsDataHandler)
   @objc open func startSyncEPO(path: Swift.String, type: Swift.Int)
+  @objc open func startSyncEPOWithSDK(type: Swift.Int)
   @objc open func syncGPSAuxiliary(local: CoreLocation.CLLocationCoordinate2D)
   @objc open func getHistoryStepData(day: Swift.Int, handler: @escaping CRPSmartBand.historyStpeHander)
   @objc open func getHistorySleepData(day: Swift.Int, handler: @escaping CRPSmartBand.historySleepHandler)
@@ -1274,12 +1288,12 @@ extension CRPSmartBand.CRPSessionDelegate : Foundation.URLSessionStreamDelegate 
   @objc open func getNewWatchFaceList(tag_id: Swift.Int, ver: Swift.String, supportModel: [Swift.Int], currentPage: Swift.Int, perPage: Swift.Int, memorySize: Swift.Int, platform: CRPSmartBand.CRPPlatform, model: CRPSmartBand.CRPScreenMarketVersionModel, _ handler: @escaping CRPSmartBand.watchFaceListHandler)
   @objc open func getNewWatchFaceInfo(screenId: Swift.Int, ver: Swift.String, supportModel: [Swift.Int], memorySize: Swift.Int, platform: CRPSmartBand.CRPPlatform, model: CRPSmartBand.CRPScreenMarketVersionModel, _ handler: @escaping CRPSmartBand.watchFaceInfoHandler)
   @objc open func getNewWatchFaceSupportModel(_ handler: @escaping CRPSmartBand.newWatchFaceSupportHandler)
-  open func setCalendar(calendar: CRPSmartBand.CRPCalendarModel)
-  open func getCalendar(id: Swift.Int, handler: @escaping CRPSmartBand.calendarHandler)
+  @objc open func setCalendar(calendar: CRPSmartBand.CRPCalendarModel)
+  @objc open func getCalendar(id: Swift.Int, handler: @escaping CRPSmartBand.calendarHandler)
   @objc open func deleteCalendar(id: Swift.Int)
-  open func getCalendarConfig(handler: @escaping CRPSmartBand.calendarConfigHandler)
-  open func setCalendarReminder(model: CRPSmartBand.CRPCalendarRemindModel)
-  open func getCalendarReminder(handler: @escaping CRPSmartBand.calendarRemindHandler)
+  @objc open func getCalendarConfig(handler: @escaping CRPSmartBand.calendarConfigHandler)
+  @objc open func setCalendarReminder(model: CRPSmartBand.CRPCalendarRemindModel)
+  @objc open func getCalendarReminder(handler: @escaping CRPSmartBand.calendarRemindHandler)
   @objc open func deleteAllCalendar()
   @objc open func getWorldClockInfo(_ handler: @escaping CRPSmartBand.worldClockProfileHandler)
   @objc open func getWorldClockDetail(id: Swift.Int, _ handler: @escaping CRPSmartBand.worldClockInfoHandler)
@@ -1319,6 +1333,23 @@ extension CRPSmartBand.CRPSessionDelegate : Foundation.URLSessionStreamDelegate 
   @objc open func stopGPTScreen()
   @objc open func getGPTScreenContent(_ handler: @escaping CRPSmartBand.screenContentHandler)
   @objc open func setupGPTScreenContent(content: CRPSmartBand.ScreenContent)
+  @objc open func getMultityScreenMarketList(handler: @escaping CRPSmartBand.intsHandler)
+  @objc open func deleteMultityScreenMarket(ids: [Swift.Int])
+  @objc open func setTasbihReminder(model: CRPSmartBand.CRPTasbihReminderModel)
+  @objc open func getTasbihReminder(_ handler: @escaping CRPSmartBand.tasbihReminderHandler)
+  @objc open func setPrayerLocationInfo(local: CoreLocation.CLLocationCoordinate2D)
+  @objc open func setAllahName(ids: [Swift.Int])
+  @objc open func setCancelAllahName(ids: [Swift.Int])
+  @objc open func getAllahName(_ handler: @escaping CRPSmartBand.intsHandler)
+  @objc open func setDuas(ids: [Swift.Int])
+  @objc open func setCancelDuas(ids: [Swift.Int])
+  @objc open func getDuas(_ handler: @escaping CRPSmartBand.intsHandler)
+  @objc open func setDuasRemindeSwitch(model: CRPSmartBand.CRPPrayerTimingReminderModel)
+  @objc open func getDuasRemindeSwitch(_ handler: @escaping CRPSmartBand.prayerTimingsHandler)
+  @objc open func setDuascalcMethods(model: CRPSmartBand.CRPPrayerTimingCalculationModel)
+  @objc open func getDuascalcMethods(_ handler: @escaping CRPSmartBand.prayerTimingsCalculationHandler)
+  @objc open func getNapsSleep(_ handler: @escaping CRPSmartBand.napsSleepHandler)
+  @objc open func getNapsSleepHistory(day: Swift.Int, handler: @escaping CRPSmartBand.historyNapsSleepHandler)
   @objc deinit
 }
 open class CRPMultipartFormData {
@@ -2075,6 +2106,8 @@ public func getCurrentLanguage() -> Swift.String
   @objc public var distance: Swift.Int
   @objc public var kcal: Swift.Int
   @objc public var heartRate: [Swift.Int]
+  @objc public var cadences: [Swift.Int]
+  @objc public var strides: [Swift.Int]
   @objc deinit
 }
 @objc @_hasMissingDesignatedInitializers @objcMembers public class CRPSportRecord : ObjectiveC.NSObject {
@@ -2283,7 +2316,7 @@ public func getCurrentLanguage() -> Swift.String
     get
   }
 }
-@objcMembers public class CRPCalendarModel {
+@objc @objcMembers public class CRPCalendarModel : ObjectiveC.NSObject {
   @objc public var id: Swift.Int
   @objc public var title: Swift.String
   @objc public var startTime: Foundation.Date
@@ -2291,21 +2324,79 @@ public func getCurrentLanguage() -> Swift.String
   @objc public init(id: Swift.Int, title: Swift.String, startTime: Foundation.Date, endTime: Foundation.Date)
   @objc deinit
 }
-@_hasMissingDesignatedInitializers @objcMembers public class CRPCalendarConfigModel {
+@objc @_hasMissingDesignatedInitializers @objcMembers public class CRPCalendarConfigModel : ObjectiveC.NSObject {
   @objc final public let limit: Swift.Int
-  final public let records: [CRPSmartBand.CRPCalendarRecordModel]
+  @objc final public let records: [CRPSmartBand.CRPCalendarRecordModel]
   @objc deinit
 }
-@_hasMissingDesignatedInitializers @objcMembers public class CRPCalendarRecordModel {
+@objc @_hasMissingDesignatedInitializers @objcMembers public class CRPCalendarRecordModel : ObjectiveC.NSObject {
   @objc final public let id: Swift.Int
   @objc final public let time: Swift.Int
   @objc deinit
 }
-@objcMembers public class CRPCalendarRemindModel {
+@objc @objcMembers public class CRPCalendarRemindModel : ObjectiveC.NSObject {
   @objc public var isRemind: Swift.Bool
   @objc public var remindTime: Swift.Int
   @objc public init(isRemind: Swift.Bool, remindTime: Swift.Int)
   @objc deinit
+}
+@objc @objcMembers public class CRPTasbihReminderModel : ObjectiveC.NSObject {
+  @objc public var isTasbihReminder: Swift.Bool
+  @objc public var intervalTime: Swift.Int
+  @objc public var weekday: [Swift.Int]
+  @objc public var startHour: Swift.Int
+  @objc public var startMin: Swift.Int
+  @objc public var endHour: Swift.Int
+  @objc public var endMin: Swift.Int
+  @objc public init(isTasbihReminder: Swift.Bool, intervalTime: Swift.Int, weekday: [Swift.Int], startHour: Swift.Int, startMin: Swift.Int, endHour: Swift.Int, endMin: Swift.Int)
+  @objc deinit
+}
+@objc @objcMembers public class CRPPrayerTimingReminderModel : ObjectiveC.NSObject {
+  @objc public var isReminder: Swift.Bool
+  @objc public var prayerTimeState: [Swift.Int]
+  @objc public init(isReminder: Swift.Bool, prayerTimeState: [Swift.Int])
+  @objc deinit
+}
+@objc @objcMembers public class CRPPrayerTimingCalculationModel : ObjectiveC.NSObject {
+  @objc public var calcMethod: CRPSmartBand.CRPPrayerTimingsCalculationMethod
+  @objc public var asrMethod: CRPSmartBand.CRPJuristicMethod
+  @objc public init(calcMethod: CRPSmartBand.CRPPrayerTimingsCalculationMethod, asrMethod: CRPSmartBand.CRPJuristicMethod)
+  @objc deinit
+}
+@objc public enum CRPPrayerTimingsCalculationMethod : Swift.Int {
+  case Jafari = 0
+  case Karachi = 1
+  case MWL = 2
+  case ISNA = 3
+  case Makkah = 4
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public enum CRPJuristicMethod : Swift.Int {
+  case Shafii = 0
+  case Hanafi = 1
+  case none = 2
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public enum CRPPrayerTimeName : Swift.Int {
+  case Fajr = 0
+  case Sunrise = 1
+  case Dhuhr = 2
+  case Asr = 3
+  case Maghrib = 4
+  case Isha = 5
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
 }
 public typealias scanCompletionHandler = ((_ result: [CRPSmartBand.CRPDiscovery]?, _ error: CRPSmartBand.CRPError) -> Swift.Void)
 public typealias scanProgressHandler = ((_ newDiscoveries: [CRPSmartBand.CRPDiscovery]) -> Swift.Void)
@@ -2370,6 +2461,11 @@ public typealias gptSupportTypeHandler = ((_ type: CRPSmartBand.GPTShowType, _ e
 public typealias calendarHandler = ((_ model: CRPSmartBand.CRPCalendarModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
 public typealias calendarConfigHandler = ((_ model: CRPSmartBand.CRPCalendarConfigModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
 public typealias calendarRemindHandler = ((_ model: CRPSmartBand.CRPCalendarRemindModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
+public typealias tasbihReminderHandler = ((_ model: CRPSmartBand.CRPTasbihReminderModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
+public typealias prayerTimingsHandler = ((_ model: CRPSmartBand.CRPPrayerTimingReminderModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
+public typealias prayerTimingsCalculationHandler = ((_ model: CRPSmartBand.CRPPrayerTimingCalculationModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
+public typealias napsSleepHandler = ((_ napSleepModel: [CRPSmartBand.CRPNapsSleep], _ error: CRPSmartBand.CRPError) -> Swift.Void)
+public typealias historyNapsSleepHandler = ((_ day: Swift.Int, _ napSleepModel: [CRPSmartBand.CRPNapsSleep], _ error: CRPSmartBand.CRPError) -> Swift.Void)
 public enum CRPAFError : Swift.Error {
   public enum ParameterEncodingFailureReason {
     case missingURL
@@ -2572,3 +2668,12 @@ extension CRPSmartBand.GPTShowType : Swift.RawRepresentable {}
 extension CRPSmartBand.CRPPairState : Swift.Equatable {}
 extension CRPSmartBand.CRPPairState : Swift.Hashable {}
 extension CRPSmartBand.CRPPairState : Swift.RawRepresentable {}
+extension CRPSmartBand.CRPPrayerTimingsCalculationMethod : Swift.Equatable {}
+extension CRPSmartBand.CRPPrayerTimingsCalculationMethod : Swift.Hashable {}
+extension CRPSmartBand.CRPPrayerTimingsCalculationMethod : Swift.RawRepresentable {}
+extension CRPSmartBand.CRPJuristicMethod : Swift.Equatable {}
+extension CRPSmartBand.CRPJuristicMethod : Swift.Hashable {}
+extension CRPSmartBand.CRPJuristicMethod : Swift.RawRepresentable {}
+extension CRPSmartBand.CRPPrayerTimeName : Swift.Equatable {}
+extension CRPSmartBand.CRPPrayerTimeName : Swift.Hashable {}
+extension CRPSmartBand.CRPPrayerTimeName : Swift.RawRepresentable {}

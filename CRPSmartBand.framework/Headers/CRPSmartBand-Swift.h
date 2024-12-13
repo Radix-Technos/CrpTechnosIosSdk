@@ -527,6 +527,51 @@ SWIFT_CLASS("_TtC12CRPSmartBand18CRPBrightnessModel")
 + (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
 @end
 
+@class CRPCalendarRecordModel;
+
+SWIFT_CLASS("_TtC12CRPSmartBand22CRPCalendarConfigModel")
+@interface CRPCalendarConfigModel : NSObject
+@property (nonatomic, readonly) NSInteger limit;
+@property (nonatomic, readonly, copy) NSArray<CRPCalendarRecordModel *> * _Nonnull records;
+- (nonnull instancetype)initWithLimit:(NSInteger)limit records:(NSArray<CRPCalendarRecordModel *> * _Nonnull)records OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+@class NSDate;
+
+SWIFT_CLASS("_TtC12CRPSmartBand16CRPCalendarModel")
+@interface CRPCalendarModel : NSObject
+@property (nonatomic) NSInteger id;
+@property (nonatomic, copy) NSString * _Nonnull title;
+@property (nonatomic, copy) NSDate * _Nonnull startTime;
+@property (nonatomic, copy) NSDate * _Nonnull endTime;
+@property (nonatomic, readonly) NSInteger limit;
+- (nonnull instancetype)initWithId:(NSInteger)id title:(NSString * _Nonnull)title startTime:(NSDate * _Nonnull)startTime endTime:(NSDate * _Nonnull)endTime OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+
+SWIFT_CLASS("_TtC12CRPSmartBand22CRPCalendarRecordModel")
+@interface CRPCalendarRecordModel : NSObject
+@property (nonatomic, readonly) NSInteger id;
+@property (nonatomic, readonly) NSInteger time;
+- (nonnull instancetype)initWithId:(NSInteger)id time:(NSInteger)time OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+
+SWIFT_CLASS("_TtC12CRPSmartBand22CRPCalendarRemindModel")
+@interface CRPCalendarRemindModel : NSObject
+@property (nonatomic) BOOL isRemind;
+@property (nonatomic) NSInteger remindTime;
+- (nonnull instancetype)initWithIsRemind:(BOOL)isRemind remindTime:(NSInteger)remindTime OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
 @class UIImage;
 
 SWIFT_CLASS("_TtC12CRPSmartBand10CRPContact")
@@ -754,6 +799,14 @@ typedef SWIFT_ENUM(NSInteger, CRPJieLiChip, open) {
   CRPJieLiChipJL_701n = 1,
 };
 
+typedef SWIFT_ENUM(NSInteger, CRPJuristicMethod, open) {
+/// Shafi’i, Maliki, Ja’fari, and Hanbali
+  CRPJuristicMethodShafii = 0,
+/// Hanafi
+  CRPJuristicMethodHanafi = 1,
+  CRPJuristicMethodNone = 2,
+};
+
 enum CRPState : NSInteger;
 @class SleepModel;
 @class StepModel;
@@ -781,6 +834,10 @@ enum CRPState : NSInteger;
 @class CRPNewDrinkWaterRecord;
 @class CRPNewDrinkWaterRemind;
 enum GPTShowType : NSInteger;
+@class CRPTasbihReminderModel;
+@class CRPPrayerTimingReminderModel;
+@class CRPPrayerTimingCalculationModel;
+@class CRPNapsSleep;
 
 SWIFT_CLASS("_TtC12CRPSmartBand18CRPManagerHandlers")
 @interface CRPManagerHandlers : NSObject
@@ -898,6 +955,17 @@ SWIFT_CLASS("_TtC12CRPSmartBand18CRPManagerHandlers")
 @property (nonatomic, copy) void (^ _Null_unspecified stockSupportCountHandler)(NSInteger, enum CRPError);
 @property (nonatomic, copy) void (^ _Null_unspecified gptSupportTypeHandler)(enum GPTShowType, enum CRPError);
 @property (nonatomic, copy) void (^ _Null_unspecified gptScreenContentHandler)(ScreenContent * _Nonnull, ScreenImageSize * _Nonnull, NSInteger, enum CRPError);
+@property (nonatomic, copy) void (^ _Null_unspecified calendarHandler)(CRPCalendarModel * _Nonnull, enum CRPError);
+@property (nonatomic, copy) void (^ _Null_unspecified calendarConfigHandler)(CRPCalendarConfigModel * _Nonnull, enum CRPError);
+@property (nonatomic, copy) void (^ _Null_unspecified calendarRemindHandler)(CRPCalendarRemindModel * _Nonnull, enum CRPError);
+@property (nonatomic, copy) void (^ _Null_unspecified multityScreenMarketList)(NSArray<NSNumber *> * _Nonnull, enum CRPError);
+@property (nonatomic, copy) void (^ _Null_unspecified tasbihReminderHandler)(CRPTasbihReminderModel * _Nonnull, enum CRPError);
+@property (nonatomic, copy) void (^ _Null_unspecified AllahNameHandler)(NSArray<NSNumber *> * _Nonnull, enum CRPError);
+@property (nonatomic, copy) void (^ _Null_unspecified duasHandler)(NSArray<NSNumber *> * _Nonnull, enum CRPError);
+@property (nonatomic, copy) void (^ _Null_unspecified prayerTimingsHandler)(CRPPrayerTimingReminderModel * _Nonnull, enum CRPError);
+@property (nonatomic, copy) void (^ _Null_unspecified prayerTimingsCalculationHandler)(CRPPrayerTimingCalculationModel * _Nonnull, enum CRPError);
+@property (nonatomic, copy) void (^ _Null_unspecified napSleepHandler)(NSArray<CRPNapsSleep *> * _Nonnull, enum CRPError);
+@property (nonatomic, copy) void (^ _Null_unspecified historyNapSleepHandler)(NSInteger, NSArray<CRPNapsSleep *> * _Nonnull, enum CRPError);
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
@@ -1138,6 +1206,12 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) CRPManager *
 - (void)readSportRecordDataWithId:(NSInteger)id;
 /// 根据ID和offset获取相应的锻炼心率数据
 - (void)readSportRecordHRWithId:(NSInteger)id offset:(NSInteger)offset;
+/// 根据ID获取相应锻炼记录数据
+- (void)readSportSupportType;
+/// 根据ID和offset获取相应的锻炼步频数据
+- (void)readSportRecordStepWithId:(NSInteger)id offset:(NSInteger)offset;
+/// 根据ID和offset获取相应的锻炼步频距离数据
+- (void)readSportRecordDistanceWithId:(NSInteger)id offset:(NSInteger)offset;
 /// 获取通话蓝牙连接状态
 - (void)readTalkBluetoothConnectState;
 /// 设置A2DP控制开关
@@ -1154,6 +1228,7 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) CRPManager *
 - (void)sendPairReplyWithAllow:(BOOL)allow;
 /// 获取消息推送的开关支持类型
 - (void)readNotificationSupportType;
+- (void)setCalendarWithCalendar:(CRPCalendarModel * _Nonnull)calendar;
 - (void)getCalendarWithId:(NSInteger)id;
 - (void)deleteCalendarWithId:(NSInteger)id;
 - (void)getCalendarSupportLimit;
@@ -1236,6 +1311,21 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) CRPManager *
 - (void)sendStockDataDetailWithData:(NSArray<NSNumber *> * _Nonnull)data;
 - (void)deleteStockInfoWithId:(NSInteger)id;
 - (void)sendStockSequenceWithIds:(NSArray<NSNumber *> * _Nonnull)ids;
+- (void)sendTasbihReminder:(NSArray<NSNumber *> * _Nonnull)cmds;
+- (void)readTasbihReminder;
+- (void)sendPrayerLocationInfoWithLatitude:(NSInteger)latitude longitude:(NSInteger)longitude;
+- (void)sendAllahNameWithIds:(NSArray<NSNumber *> * _Nonnull)ids;
+- (void)sendCancelAllahNameWithIds:(NSArray<NSNumber *> * _Nonnull)ids;
+- (void)readAllahName;
+- (void)sendDuasWithIds:(NSArray<NSNumber *> * _Nonnull)ids;
+- (void)sendCancelDuasWithIds:(NSArray<NSNumber *> * _Nonnull)ids;
+- (void)readDuas;
+- (void)sendDuasRemindeSwitchWithCmds:(NSArray<NSNumber *> * _Nonnull)cmds;
+- (void)readDuasRemindeSwitch;
+- (void)sendDuascalcMethodsWithMethod:(NSInteger)method asr:(NSInteger)asr;
+- (void)readDuascalcMethods;
+- (void)readMultityScreenMarketList;
+- (void)deleteMultityScreenMarketWithIds:(NSArray<NSNumber *> * _Nonnull)ids;
 - (void)sendDrinkWaterGoalWithGoal:(NSInteger)goal;
 - (void)readDrinkWaterGoal;
 - (void)sendTodayDrinkWaterTotalValueWithValue:(NSInteger)value;
@@ -1251,6 +1341,8 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) CRPManager *
 - (void)sendSOSSwitchWithOpen:(BOOL)open;
 - (void)sendEmergencyContactWithContact:(CRPEmergencyContact * _Nonnull)contact;
 - (void)readEmergencyContact;
+- (void)readNapsSleep;
+- (void)readNapsSleepHistoryWithDay:(NSInteger)day;
 - (void)addProtocolWithCmd:(NSArray<NSNumber *> * _Nonnull)cmd;
 - (void)addProtocolWithoutConnectedWithCmd:(NSArray<NSNumber *> * _Nonnull)cmd;
 - (void)stateChange:(CBCentralManager * _Nonnull)central;
@@ -1335,6 +1427,10 @@ SWIFT_PROTOCOL("_TtP12CRPSmartBand18CRPManagerDelegate_")
 - (void)receiveRequestGPTAnswer;
 - (void)receiveRequestGPTPreviewImageWithImageSize:(CGSize)imageSize;
 - (void)receiveRequestGPTImage;
+- (void)receivePrayerAuxiliaryRequest;
+- (void)receiveDeleteAllahNameWithId:(NSInteger)id;
+- (void)receiveDeleteDuasWithId:(NSInteger)id;
+- (void)receiveSOS;
 @end
 
 
@@ -1359,6 +1455,19 @@ SWIFT_CLASS("_TtC12CRPSmartBand20CRPMedicineTimeModel")
 @property (nonatomic) NSInteger remindTimeMinute;
 @property (nonatomic) NSInteger pillCount;
 - (nonnull instancetype)initWithRemindTimeHour:(NSInteger)remindTimeHour remindTimeMinute:(NSInteger)remindTimeMinute pillCount:(NSInteger)pillCount OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+
+SWIFT_CLASS("_TtC12CRPSmartBand12CRPNapsSleep")
+@interface CRPNapsSleep : NSObject
+@property (nonatomic, readonly) NSInteger startHour;
+@property (nonatomic, readonly) NSInteger startMin;
+@property (nonatomic, readonly) NSInteger endHour;
+@property (nonatomic, readonly) NSInteger endMin;
+@property (nonatomic, readonly) NSInteger totalMin;
+- (nonnull instancetype)initWithStartHour:(NSInteger)startHour startMin:(NSInteger)startMin endHour:(NSInteger)endHour endMin:(NSInteger)endMin OBJC_DESIGNATED_INITIALIZER;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
 @end
@@ -1400,7 +1509,11 @@ SWIFT_CLASS("_TtC12CRPSmartBand16CRPNewSportModel")
 @property (nonatomic) NSInteger distance;
 @property (nonatomic) NSInteger kcal;
 @property (nonatomic, copy) NSArray<NSNumber *> * _Nonnull heartRate;
-- (nonnull instancetype)initWithId:(NSInteger)id startTime:(NSInteger)startTime endTime:(NSInteger)endTime vaildTime:(NSInteger)vaildTime type:(enum SportType)type step:(NSInteger)step distance:(NSInteger)distance kcal:(NSInteger)kcal heartRate:(NSArray<NSNumber *> * _Nonnull)heartRate OBJC_DESIGNATED_INITIALIZER;
+/// A value is generated every 10 seconds, and each value represents the number of steps generated in these 10 seconds.
+@property (nonatomic, copy) NSArray<NSNumber *> * _Nonnull cadences;
+/// A value is generated every 10 seconds, and each value represents the distance generated in these 10 seconds.
+@property (nonatomic, copy) NSArray<NSNumber *> * _Nonnull strides;
+- (nonnull instancetype)initWithId:(NSInteger)id startTime:(NSInteger)startTime endTime:(NSInteger)endTime vaildTime:(NSInteger)vaildTime type:(enum SportType)type step:(NSInteger)step distance:(NSInteger)distance kcal:(NSInteger)kcal heartRate:(NSArray<NSNumber *> * _Nonnull)heartRate cadences:(NSArray<NSNumber *> * _Nonnull)cadences strides:(NSArray<NSNumber *> * _Nonnull)strides OBJC_DESIGNATED_INITIALIZER;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
 @end
@@ -1520,6 +1633,50 @@ SWIFT_CLASS("_TtC12CRPSmartBand16CRPPlatformModel")
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
 @end
+
+typedef SWIFT_ENUM(NSInteger, CRPPrayerTimeName, open) {
+  CRPPrayerTimeNameFajr = 0,
+  CRPPrayerTimeNameSunrise = 1,
+  CRPPrayerTimeNameDhuhr = 2,
+  CRPPrayerTimeNameAsr = 3,
+  CRPPrayerTimeNameMaghrib = 4,
+  CRPPrayerTimeNameIsha = 5,
+};
+
+enum CRPPrayerTimingsCalculationMethod : NSInteger;
+
+SWIFT_CLASS("_TtC12CRPSmartBand31CRPPrayerTimingCalculationModel")
+@interface CRPPrayerTimingCalculationModel : NSObject
+@property (nonatomic) enum CRPPrayerTimingsCalculationMethod calcMethod;
+@property (nonatomic) enum CRPJuristicMethod asrMethod;
+- (nonnull instancetype)initWithCalcMethod:(enum CRPPrayerTimingsCalculationMethod)calcMethod asrMethod:(enum CRPJuristicMethod)asrMethod OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+
+SWIFT_CLASS("_TtC12CRPSmartBand28CRPPrayerTimingReminderModel")
+@interface CRPPrayerTimingReminderModel : NSObject
+@property (nonatomic) BOOL isReminder;
+/// PrayerTimeName
+@property (nonatomic, copy) NSArray<NSNumber *> * _Nonnull prayerTimeState;
+- (nonnull instancetype)initWithIsReminder:(BOOL)isReminder prayerTimeState:(NSArray<NSNumber *> * _Nonnull)prayerTimeState OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+typedef SWIFT_ENUM(NSInteger, CRPPrayerTimingsCalculationMethod, open) {
+/// Shia Ithna Ashari, Leva Research Institute, Qum
+  CRPPrayerTimingsCalculationMethodJafari = 0,
+/// University of Islamic Science, Karachi
+  CRPPrayerTimingsCalculationMethodKarachi = 1,
+/// Muslim World League
+  CRPPrayerTimingsCalculationMethodMWL = 2,
+/// Islamic Society of North America
+  CRPPrayerTimingsCalculationMethodISNA = 3,
+/// Umm al-Qura University, Makkah
+  CRPPrayerTimingsCalculationMethodMakkah = 4,
+};
 
 typedef SWIFT_ENUM(NSInteger, CRPRealtekChip, open) {
   CRPRealtekChipNone = 0,
@@ -1904,7 +2061,6 @@ SWIFT_CLASS("_TtC12CRPSmartBand12CRPSleepData")
 @property (nonatomic, readonly) NSInteger REM_START_TIME;
 @property (nonatomic, readonly) NSInteger REM_PERIOD;
 - (nonnull instancetype)init:(NSMutableData * _Nonnull)nsdata isAgoSleep:(BOOL)isAgoSleep isREM:(BOOL)isREM OBJC_DESIGNATED_INITIALIZER;
-- (NSInteger)formatSleepTimeWithCurrentHour:(NSInteger)currentHour currentMinute:(NSInteger)currentMinute nextHour:(NSInteger)nextHour nextMinute:(NSInteger)nextMinute SWIFT_WARN_UNUSED_RESULT;
 - (NSInteger)getREMTimeWithLast:(NSInteger)last total:(NSInteger)total SWIFT_WARN_UNUSED_RESULT;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
@@ -1979,6 +2135,7 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) CRPSmartBand
 - (void)receiveRequestGPTAnswer;
 - (void)receiveRequestGPTPreviewImageWithImageSize:(CGSize)imageSize;
 - (void)receiveRequestGPTImage;
+- (void)receiveSOS;
 - (void)scan:(NSTimeInterval)duration progressHandler:(void (^ _Nullable)(NSArray<CRPDiscovery *> * _Nonnull))progressHandler completionHandler:(void (^ _Nullable)(NSArray<CRPDiscovery *> * _Nullable, enum CRPError))completionHandler;
 - (void)interruptScan;
 - (void)connet:(CRPDiscovery * _Nonnull)discovery;
@@ -2185,6 +2342,7 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) CRPSmartBand
 - (void)getGPSDataRecordList;
 - (void)getGPSRecordDataWithTime:(NSInteger)time :(void (^ _Nonnull)(NSInteger, NSArray<NSValue *> * _Nonnull, enum CRPError))handler;
 - (void)startSyncEPOWithPath:(NSString * _Nonnull)path type:(NSInteger)type;
+- (void)startSyncEPOWithSDKWithType:(NSInteger)type;
 - (void)syncGPSAuxiliaryWithLocal:(CLLocationCoordinate2D)local;
 - (void)getHistoryStepDataWithDay:(NSInteger)day handler:(void (^ _Nonnull)(NSInteger, StepModel * _Nonnull, enum CRPError))handler;
 - (void)getHistorySleepDataWithDay:(NSInteger)day handler:(void (^ _Nonnull)(NSInteger, SleepModel * _Nonnull, enum CRPError))handler;
@@ -2212,7 +2370,12 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) CRPSmartBand
 - (void)getNewWatchFaceListWithTag_id:(NSInteger)tag_id ver:(NSString * _Nonnull)ver supportModel:(NSArray<NSNumber *> * _Nonnull)supportModel currentPage:(NSInteger)currentPage perPage:(NSInteger)perPage memorySize:(NSInteger)memorySize platform:(enum CRPPlatform)platform model:(CRPScreenMarketVersionModel * _Nonnull)model :(void (^ _Nonnull)(NSArray<CRPScreenModel *> * _Nonnull, enum CRPError))handler;
 - (void)getNewWatchFaceInfoWithScreenId:(NSInteger)screenId ver:(NSString * _Nonnull)ver supportModel:(NSArray<NSNumber *> * _Nonnull)supportModel memorySize:(NSInteger)memorySize platform:(enum CRPPlatform)platform model:(CRPScreenMarketVersionModel * _Nonnull)model :(void (^ _Nonnull)(CRPScreenModelInfo * _Nullable, enum CRPError))handler;
 - (void)getNewWatchFaceSupportModel:(void (^ _Nonnull)(CRPNewWatchFaceSupportModel * _Nonnull, enum CRPError))handler;
+- (void)setCalendarWithCalendar:(CRPCalendarModel * _Nonnull)calendar;
+- (void)getCalendarWithId:(NSInteger)id handler:(void (^ _Nonnull)(CRPCalendarModel * _Nonnull, enum CRPError))handler;
 - (void)deleteCalendarWithId:(NSInteger)id;
+- (void)getCalendarConfigWithHandler:(void (^ _Nonnull)(CRPCalendarConfigModel * _Nonnull, enum CRPError))handler;
+- (void)setCalendarReminderWithModel:(CRPCalendarRemindModel * _Nonnull)model;
+- (void)getCalendarReminderWithHandler:(void (^ _Nonnull)(CRPCalendarRemindModel * _Nonnull, enum CRPError))handler;
 - (void)deleteAllCalendar;
 - (void)getWorldClockInfo:(void (^ _Nonnull)(CRPWorldClockProfileModel * _Nonnull, enum CRPError))handler;
 - (void)getWorldClockDetailWithId:(NSInteger)id :(void (^ _Nonnull)(CRPWorldClockModel * _Nonnull, enum CRPError))handler;
@@ -2252,6 +2415,37 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) CRPSmartBand
 - (void)stopGPTScreen;
 - (void)getGPTScreenContent:(void (^ _Nonnull)(ScreenContent * _Nonnull, ScreenImageSize * _Nonnull, NSInteger, enum CRPError))handler;
 - (void)setupGPTScreenContentWithContent:(ScreenContent * _Nonnull)content;
+- (void)getMultityScreenMarketListWithHandler:(void (^ _Nonnull)(NSArray<NSNumber *> * _Nonnull, enum CRPError))handler;
+- (void)deleteMultityScreenMarketWithIds:(NSArray<NSNumber *> * _Nonnull)ids;
+/// 穆斯林赞念提醒设置
+- (void)setTasbihReminderWithModel:(CRPTasbihReminderModel * _Nonnull)model;
+/// 穆斯林赞念提醒设置查询
+- (void)getTasbihReminder:(void (^ _Nonnull)(CRPTasbihReminderModel * _Nonnull, enum CRPError))handler;
+- (void)setPrayerLocationInfoWithLocal:(CLLocationCoordinate2D)local;
+/// 穆斯林安拉真名设置
+- (void)setAllahNameWithIds:(NSArray<NSNumber *> * _Nonnull)ids;
+/// 穆斯林安拉真名取消
+- (void)setCancelAllahNameWithIds:(NSArray<NSNumber *> * _Nonnull)ids;
+/// 穆斯林安拉真名查询
+- (void)getAllahName:(void (^ _Nonnull)(NSArray<NSNumber *> * _Nonnull, enum CRPError))handler;
+/// 穆斯林祈祷词设置
+- (void)setDuasWithIds:(NSArray<NSNumber *> * _Nonnull)ids;
+/// 穆斯林祈祷词设置取消
+- (void)setCancelDuasWithIds:(NSArray<NSNumber *> * _Nonnull)ids;
+/// 穆斯林祈祷词设置查询
+- (void)getDuas:(void (^ _Nonnull)(NSArray<NSNumber *> * _Nonnull, enum CRPError))handler;
+/// 穆斯林祈祷通知开关设置
+- (void)setDuasRemindeSwitchWithModel:(CRPPrayerTimingReminderModel * _Nonnull)model;
+/// 穆斯林祈祷通知开关查询
+- (void)getDuasRemindeSwitch:(void (^ _Nonnull)(CRPPrayerTimingReminderModel * _Nonnull, enum CRPError))handler;
+/// 穆斯林祈祷时间算法设置
+- (void)setDuascalcMethodsWithModel:(CRPPrayerTimingCalculationModel * _Nonnull)model;
+/// 穆斯林祈祷时间算法查询
+- (void)getDuascalcMethods:(void (^ _Nonnull)(CRPPrayerTimingCalculationModel * _Nonnull, enum CRPError))handler;
+/// 获取当天小睡数据
+- (void)getNapsSleep:(void (^ _Nonnull)(NSArray<CRPNapsSleep *> * _Nonnull, enum CRPError))handler;
+/// 获取当天小睡数据day：1：昨天 2：前天
+- (void)getNapsSleepHistoryWithDay:(NSInteger)day handler:(void (^ _Nonnull)(NSInteger, NSArray<CRPNapsSleep *> * _Nonnull, enum CRPError))handler;
 @end
 
 
@@ -2341,6 +2535,22 @@ SWIFT_CLASS("_TtC12CRPSmartBand20CRPStressRecordModel")
 @property (nonatomic) NSInteger value;
 @property (nonatomic) NSInteger time;
 - (nonnull instancetype)initWithValue:(NSInteger)value time:(NSInteger)time OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+
+SWIFT_CLASS("_TtC12CRPSmartBand22CRPTasbihReminderModel")
+@interface CRPTasbihReminderModel : NSObject
+@property (nonatomic) BOOL isTasbihReminder;
+@property (nonatomic) NSInteger intervalTime;
+/// /CRPWeekDay
+@property (nonatomic, copy) NSArray<NSNumber *> * _Nonnull weekday;
+@property (nonatomic) NSInteger startHour;
+@property (nonatomic) NSInteger startMin;
+@property (nonatomic) NSInteger endHour;
+@property (nonatomic) NSInteger endMin;
+- (nonnull instancetype)initWithIsTasbihReminder:(BOOL)isTasbihReminder intervalTime:(NSInteger)intervalTime weekday:(NSArray<NSNumber *> * _Nonnull)weekday startHour:(NSInteger)startHour startMin:(NSInteger)startMin endHour:(NSInteger)endHour endMin:(NSInteger)endMin OBJC_DESIGNATED_INITIALIZER;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
 @end
@@ -2752,13 +2962,19 @@ SWIFT_CLASS("_TtC12CRPSmartBand9SportData")
 @property (nonatomic, readonly, copy) NSString * _Nonnull languageCode;
 @property (nonatomic) NSInteger avg;
 @property (nonatomic, copy) NSArray<SportModel *> * _Nonnull sportData;
-@property (nonatomic, copy) NSDictionary<NSNumber *, SportModel *> * _Nonnull sportDetail;
+@property (nonatomic, copy) NSDictionary<NSNumber *, CRPNewSportModel *> * _Nonnull sportDetail;
 @property (nonatomic, copy) NSDictionary<NSNumber *, NSArray<NSNumber *> *> * _Nonnull sportHeartRate;
+@property (nonatomic, copy) NSDictionary<NSNumber *, NSArray<NSNumber *> *> * _Nonnull sportStpe;
+@property (nonatomic, copy) NSDictionary<NSNumber *, NSArray<NSNumber *> *> * _Nonnull sportDistance;
+/// 0代表仅hr, 1代表hr + 步频, 2代表hr + 步频 + 距离
+@property (nonatomic) NSInteger sportSupportType;
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) SportData * _Nonnull sharedInstance;)
 + (SportData * _Nonnull)sharedInstance SWIFT_WARN_UNUSED_RESULT;
 - (void)save:(Binary * _Nonnull)binary;
 - (void)saveSportDetail:(Binary * _Nonnull)binary;
 - (void)saveSportHeartRate:(Binary * _Nonnull)binary;
+- (void)saveSportStep:(Binary * _Nonnull)binary;
+- (void)saveSportDistance:(Binary * _Nonnull)binary;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
