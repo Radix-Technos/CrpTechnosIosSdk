@@ -1,5 +1,5 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.9.2 (swiftlang-5.9.2.2.56 clang-1500.1.0.2.5)
+// swift-compiler-version: Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)
 // swift-module-flags: -target arm64-apple-ios9.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name CRPSmartBand
 // swift-module-flags-ignorable: -enable-bare-slash-regex
 @_exported import CRPSmartBand
@@ -10,15 +10,12 @@ import Foundation
 import MobileCoreServices
 import OTAFramework
 import RTKOTASDK
-import SpeexKit
 import Swift
 import SystemConfiguration
 import UIKit
 import _Concurrency
 import _StringProcessing
-import _SwiftConcurrencyShims
 import CRPSmartBand.minilzo_Private
-import CRPSmartBand.opus_Public
 import CRPSmartBand.zipArchive_Public
 public enum CRPHTTPMethod : Swift.String {
   case options
@@ -38,7 +35,7 @@ public enum CRPHTTPMethod : Swift.String {
 }
 public typealias CRPParameters = [Swift.String : Any]
 public protocol CRPParameterEncoding {
-  func encode(_ urlRequest: any CRPSmartBand.CRPURLRequestConvertible, with parameters: CRPSmartBand.CRPParameters?) throws -> Foundation.URLRequest
+  func encode(_ urlRequest: CRPSmartBand.CRPURLRequestConvertible, with parameters: CRPSmartBand.CRPParameters?) throws -> Foundation.URLRequest
 }
 public struct CRPURLEncoding : CRPSmartBand.CRPParameterEncoding {
   public enum Destination {
@@ -81,7 +78,7 @@ public struct CRPURLEncoding : CRPSmartBand.CRPParameterEncoding {
   public let arrayEncoding: CRPSmartBand.CRPURLEncoding.ArrayEncoding
   public let boolEncoding: CRPSmartBand.CRPURLEncoding.BoolEncoding
   public init(destination: CRPSmartBand.CRPURLEncoding.Destination = .methodDependent, arrayEncoding: CRPSmartBand.CRPURLEncoding.ArrayEncoding = .brackets, boolEncoding: CRPSmartBand.CRPURLEncoding.BoolEncoding = .numeric)
-  public func encode(_ urlRequest: any CRPSmartBand.CRPURLRequestConvertible, with parameters: CRPSmartBand.CRPParameters?) throws -> Foundation.URLRequest
+  public func encode(_ urlRequest: CRPSmartBand.CRPURLRequestConvertible, with parameters: CRPSmartBand.CRPParameters?) throws -> Foundation.URLRequest
   public func queryComponents(fromKey key: Swift.String, value: Any) -> [(Swift.String, Swift.String)]
   public func escape(_ string: Swift.String) -> Swift.String
 }
@@ -94,8 +91,8 @@ public struct CRPJSONEncoding : CRPSmartBand.CRPParameterEncoding {
   }
   public let options: Foundation.JSONSerialization.WritingOptions
   public init(options: Foundation.JSONSerialization.WritingOptions = [])
-  public func encode(_ urlRequest: any CRPSmartBand.CRPURLRequestConvertible, with parameters: CRPSmartBand.CRPParameters?) throws -> Foundation.URLRequest
-  public func encode(_ urlRequest: any CRPSmartBand.CRPURLRequestConvertible, withJSONObject jsonObject: Any? = nil) throws -> Foundation.URLRequest
+  public func encode(_ urlRequest: CRPSmartBand.CRPURLRequestConvertible, with parameters: CRPSmartBand.CRPParameters?) throws -> Foundation.URLRequest
+  public func encode(_ urlRequest: CRPSmartBand.CRPURLRequestConvertible, withJSONObject jsonObject: Any? = nil) throws -> Foundation.URLRequest
 }
 public struct CRPPropertyListEncoding : CRPSmartBand.CRPParameterEncoding {
   public static var `default`: CRPSmartBand.CRPPropertyListEncoding {
@@ -110,14 +107,14 @@ public struct CRPPropertyListEncoding : CRPSmartBand.CRPParameterEncoding {
   public let format: Foundation.PropertyListSerialization.PropertyListFormat
   public let options: Foundation.PropertyListSerialization.WriteOptions
   public init(format: Foundation.PropertyListSerialization.PropertyListFormat = .xml, options: Foundation.PropertyListSerialization.WriteOptions = 0)
-  public func encode(_ urlRequest: any CRPSmartBand.CRPURLRequestConvertible, with parameters: CRPSmartBand.CRPParameters?) throws -> Foundation.URLRequest
+  public func encode(_ urlRequest: CRPSmartBand.CRPURLRequestConvertible, with parameters: CRPSmartBand.CRPParameters?) throws -> Foundation.URLRequest
 }
 public protocol CRPRequestAdapter {
   func adapt(_ urlRequest: Foundation.URLRequest) throws -> Foundation.URLRequest
 }
 public typealias CRPRequestRetryCompletion = (_ shouldRetry: Swift.Bool, _ timeDelay: Foundation.TimeInterval) -> Swift.Void
 public protocol CRPRequestRetrier {
-  func should(_ manager: CRPSmartBand.CRPSessionManager, retry request: CRPSmartBand.CRPRequest, with error: any Swift.Error, completion: @escaping CRPSmartBand.CRPRequestRetryCompletion)
+  func should(_ manager: CRPSmartBand.CRPSessionManager, retry request: CRPSmartBand.CRPRequest, with error: Swift.Error, completion: @escaping CRPSmartBand.CRPRequestRetryCompletion)
 }
 public typealias HTTPHeaders = [Swift.String : Swift.String]
 @_hasMissingDesignatedInitializers open class CRPRequest {
@@ -216,21 +213,21 @@ public struct PixelData {
 }
 public protocol CRPDataResponseSerializerProtocol {
   associatedtype SerializedObject
-  var serializeResponse: (Foundation.URLRequest?, Foundation.HTTPURLResponse?, Foundation.Data?, (any Swift.Error)?) -> CRPSmartBand.CRPResult<Self.SerializedObject> { get }
+  var serializeResponse: (Foundation.URLRequest?, Foundation.HTTPURLResponse?, Foundation.Data?, Swift.Error?) -> CRPSmartBand.CRPResult<Self.SerializedObject> { get }
 }
 public struct CRPDataResponseSerializer<Value> : CRPSmartBand.CRPDataResponseSerializerProtocol {
   public typealias SerializedObject = Value
-  public var serializeResponse: (Foundation.URLRequest?, Foundation.HTTPURLResponse?, Foundation.Data?, (any Swift.Error)?) -> CRPSmartBand.CRPResult<Value>
-  public init(serializeResponse: @escaping (Foundation.URLRequest?, Foundation.HTTPURLResponse?, Foundation.Data?, (any Swift.Error)?) -> CRPSmartBand.CRPResult<Value>)
+  public var serializeResponse: (Foundation.URLRequest?, Foundation.HTTPURLResponse?, Foundation.Data?, Swift.Error?) -> CRPSmartBand.CRPResult<Value>
+  public init(serializeResponse: @escaping (Foundation.URLRequest?, Foundation.HTTPURLResponse?, Foundation.Data?, Swift.Error?) -> CRPSmartBand.CRPResult<Value>)
 }
 public protocol CRPDownloadResponseSerializerProtocol {
   associatedtype SerializedObject
-  var serializeResponse: (Foundation.URLRequest?, Foundation.HTTPURLResponse?, Foundation.URL?, (any Swift.Error)?) -> CRPSmartBand.CRPResult<Self.SerializedObject> { get }
+  var serializeResponse: (Foundation.URLRequest?, Foundation.HTTPURLResponse?, Foundation.URL?, Swift.Error?) -> CRPSmartBand.CRPResult<Self.SerializedObject> { get }
 }
 public struct CRPDownloadResponseSerializer<Value> : CRPSmartBand.CRPDownloadResponseSerializerProtocol {
   public typealias SerializedObject = Value
-  public var serializeResponse: (Foundation.URLRequest?, Foundation.HTTPURLResponse?, Foundation.URL?, (any Swift.Error)?) -> CRPSmartBand.CRPResult<Value>
-  public init(serializeResponse: @escaping (Foundation.URLRequest?, Foundation.HTTPURLResponse?, Foundation.URL?, (any Swift.Error)?) -> CRPSmartBand.CRPResult<Value>)
+  public var serializeResponse: (Foundation.URLRequest?, Foundation.HTTPURLResponse?, Foundation.URL?, Swift.Error?) -> CRPSmartBand.CRPResult<Value>
+  public init(serializeResponse: @escaping (Foundation.URLRequest?, Foundation.HTTPURLResponse?, Foundation.URL?, Swift.Error?) -> CRPSmartBand.CRPResult<Value>)
 }
 extension CRPSmartBand.CRPDataRequest {
   @discardableResult
@@ -245,7 +242,7 @@ extension CRPSmartBand.CRPDownloadRequest {
   public func response<T>(queue: Dispatch.DispatchQueue? = nil, responseSerializer: T, completionHandler: @escaping (CRPSmartBand.CRPDownloadResponse<T.SerializedObject>) -> Swift.Void) -> Self where T : CRPSmartBand.CRPDownloadResponseSerializerProtocol
 }
 extension CRPSmartBand.CRPRequest {
-  public static func serializeResponseData(response: Foundation.HTTPURLResponse?, data: Foundation.Data?, error: (any Swift.Error)?) -> CRPSmartBand.CRPResult<Foundation.Data>
+  public static func serializeResponseData(response: Foundation.HTTPURLResponse?, data: Foundation.Data?, error: Swift.Error?) -> CRPSmartBand.CRPResult<Foundation.Data>
 }
 extension CRPSmartBand.CRPDataRequest {
   public static func dataResponseSerializer() -> CRPSmartBand.CRPDataResponseSerializer<Foundation.Data>
@@ -258,7 +255,7 @@ extension CRPSmartBand.CRPDownloadRequest {
   public func responseData(queue: Dispatch.DispatchQueue? = nil, completionHandler: @escaping (CRPSmartBand.CRPDownloadResponse<Foundation.Data>) -> Swift.Void) -> Self
 }
 extension CRPSmartBand.CRPRequest {
-  public static func serializeResponseString(encoding: Swift.String.Encoding?, response: Foundation.HTTPURLResponse?, data: Foundation.Data?, error: (any Swift.Error)?) -> CRPSmartBand.CRPResult<Swift.String>
+  public static func serializeResponseString(encoding: Swift.String.Encoding?, response: Foundation.HTTPURLResponse?, data: Foundation.Data?, error: Swift.Error?) -> CRPSmartBand.CRPResult<Swift.String>
 }
 extension CRPSmartBand.CRPDataRequest {
   public static func stringResponseSerializer(encoding: Swift.String.Encoding? = nil) -> CRPSmartBand.CRPDataResponseSerializer<Swift.String>
@@ -271,7 +268,7 @@ extension CRPSmartBand.CRPDownloadRequest {
   public func responseString(queue: Dispatch.DispatchQueue? = nil, encoding: Swift.String.Encoding? = nil, completionHandler: @escaping (CRPSmartBand.CRPDownloadResponse<Swift.String>) -> Swift.Void) -> Self
 }
 extension CRPSmartBand.CRPRequest {
-  public static func serializeResponseJSON(options: Foundation.JSONSerialization.ReadingOptions, response: Foundation.HTTPURLResponse?, data: Foundation.Data?, error: (any Swift.Error)?) -> CRPSmartBand.CRPResult<Any>
+  public static func serializeResponseJSON(options: Foundation.JSONSerialization.ReadingOptions, response: Foundation.HTTPURLResponse?, data: Foundation.Data?, error: Swift.Error?) -> CRPSmartBand.CRPResult<Any>
 }
 extension CRPSmartBand.CRPDataRequest {
   public static func jsonResponseSerializer(options: Foundation.JSONSerialization.ReadingOptions = .allowFragments) -> CRPSmartBand.CRPDataResponseSerializer<Any>
@@ -284,7 +281,7 @@ extension CRPSmartBand.CRPDownloadRequest {
   public func responseJSON(queue: Dispatch.DispatchQueue? = nil, options: Foundation.JSONSerialization.ReadingOptions = .allowFragments, completionHandler: @escaping (CRPSmartBand.CRPDownloadResponse<Any>) -> Swift.Void) -> Self
 }
 extension CRPSmartBand.CRPRequest {
-  public static func serializeResponsePropertyList(options: Foundation.PropertyListSerialization.ReadOptions, response: Foundation.HTTPURLResponse?, data: Foundation.Data?, error: (any Swift.Error)?) -> CRPSmartBand.CRPResult<Any>
+  public static func serializeResponsePropertyList(options: Foundation.PropertyListSerialization.ReadOptions, response: Foundation.HTTPURLResponse?, data: Foundation.Data?, error: Swift.Error?) -> CRPSmartBand.CRPResult<Any>
 }
 extension CRPSmartBand.CRPDataRequest {
   public static func propertyListResponseSerializer(options: Foundation.PropertyListSerialization.ReadOptions = []) -> CRPSmartBand.CRPDataResponseSerializer<Any>
@@ -327,8 +324,8 @@ extension CRPSmartBand.CRPDownloadRequest {
   @objc optional func receivePhoneNumber(number: Swift.String)
   @objc optional func receiveMedicineInfo(_ max: Swift.Int, _ model: CRPSmartBand.CRPMedicineReminderModel?)
   @objc optional func receiveSportList(_ list: [CRPSmartBand.CRPSportRecord])
-  @objc optional func receiveSportState(_ state: CRPSmartBand.SportType, _ err: Swift.Int)
-  @objc optional func receiveConnectConfirm(_ state: CRPSmartBand.CRPPairState)
+  @objc optional func receiveSportState(_ state: CRPSmartBand.SportType)
+  @objc optional func receiveConnectConfirm(_ state: Swift.Int)
   @objc optional func receiveStress(_ stress: Swift.Int)
   @objc optional func receiveHRV(_ hrv: Swift.Int)
   @objc optional func receiveGPSDataRecordList(time: [Swift.Int])
@@ -337,24 +334,10 @@ extension CRPSmartBand.CRPDownloadRequest {
   @objc optional func receiveEPORequest(type: Swift.Int)
   @objc optional func receiveEPOSync(_ state: CRPSmartBand.CRPUpgradeState, _ progress: Swift.Int)
   @objc optional func receiveRealTimeSportData(data: CRPSmartBand.CRPNewSportingModel)
-  @objc optional func receiveExitCameraView()
-  @objc optional func receiveAddDrinkWaterRecord(record: CRPSmartBand.CRPNewDrinkWaterRecord)
-  @objc optional func receiveModifyDrinkWaterRecord(source: CRPSmartBand.CRPDrinkWaterSource, record: CRPSmartBand.CRPNewDrinkWaterRecord)
-  @objc optional func receiveDeleteDrinkWaterRecord(source: CRPSmartBand.CRPDrinkWaterSource, recordID: Swift.Int)
-  @objc optional func receiveRequestAppDrinkWaterRecord()
-  @objc optional func receiveStockRequestUpdateInfo()
-  @objc optional func receiveGPTState(type: CRPSmartBand.CRPGPTType, state: CRPSmartBand.CRPGPTRequestState, result: Foundation.NSData)
-  @objc optional func receiveRequestGPTAnswer()
-  @objc optional func receiveRequestGPTPreviewImage(imageSize: CoreFoundation.CGSize)
-  @objc optional func receiveRequestGPTImage()
-  @objc optional func receivePrayerAuxiliaryRequest()
-  @objc optional func receiveDeleteAllahName(id: Swift.Int)
-  @objc optional func receiveDeleteDuas(id: Swift.Int)
-  @objc optional func receiveSOS()
 }
 public enum CRPResult<Value> {
   case success(Value)
-  case failure(any Swift.Error)
+  case failure(Swift.Error)
   public var isSuccess: Swift.Bool {
     get
   }
@@ -364,7 +347,7 @@ public enum CRPResult<Value> {
   public var value: Value? {
     get
   }
-  public var error: (any Swift.Error)? {
+  public var error: Swift.Error? {
     get
   }
 }
@@ -383,24 +366,16 @@ extension CRPSmartBand.CRPResult {
   public func unwrap() throws -> Value
   public func map<T>(_ transform: (Value) -> T) -> CRPSmartBand.CRPResult<T>
   public func flatMap<T>(_ transform: (Value) throws -> T) -> CRPSmartBand.CRPResult<T>
-  public func mapError<T>(_ transform: (any Swift.Error) -> T) -> CRPSmartBand.CRPResult<Value> where T : Swift.Error
-  public func flatMapError<T>(_ transform: (any Swift.Error) throws -> T) -> CRPSmartBand.CRPResult<Value> where T : Swift.Error
+  public func mapError<T>(_ transform: (Swift.Error) -> T) -> CRPSmartBand.CRPResult<Value> where T : Swift.Error
+  public func flatMapError<T>(_ transform: (Swift.Error) throws -> T) -> CRPSmartBand.CRPResult<Value> where T : Swift.Error
   @discardableResult
   public func withValue(_ closure: (Value) -> Swift.Void) -> CRPSmartBand.CRPResult<Value>
   @discardableResult
-  public func withError(_ closure: (any Swift.Error) -> Swift.Void) -> CRPSmartBand.CRPResult<Value>
+  public func withError(_ closure: (Swift.Error) -> Swift.Void) -> CRPSmartBand.CRPResult<Value>
   @discardableResult
   public func ifSuccess(_ closure: () -> Swift.Void) -> CRPSmartBand.CRPResult<Value>
   @discardableResult
   public func ifFailure(_ closure: () -> Swift.Void) -> CRPSmartBand.CRPResult<Value>
-}
-@objc @_hasMissingDesignatedInitializers @objcMembers public class CRPNapsSleep : ObjectiveC.NSObject {
-  @objc final public let startHour: Swift.Int
-  @objc final public let startMin: Swift.Int
-  @objc final public let endHour: Swift.Int
-  @objc final public let endMin: Swift.Int
-  @objc final public let totalMin: Swift.Int
-  @objc deinit
 }
 public func == (lhs: CRPSmartBand.CRPDiscovery, rhs: CRPSmartBand.CRPDiscovery) -> Swift.Bool
 @objc @objcMembers public class CRPDiscovery : ObjectiveC.NSObject {
@@ -417,7 +392,6 @@ public func == (lhs: CRPSmartBand.CRPDiscovery, rhs: CRPSmartBand.CRPDiscovery) 
   @objc public var chip: Swift.Int
   @objc public var isPair: Swift.Bool
   @objc public var isTalk: Swift.Bool
-  @objc public var scan_code_bind: Swift.Bool
   @objc public init(advertisementData: [Swift.String : Swift.AnyObject], remotePeripheral: CoreBluetooth.CBPeripheral, RSSI: Swift.Int)
   @objc public init(remotePeripheral: CoreBluetooth.CBPeripheral, mac: Swift.String)
   @objc deinit
@@ -544,32 +518,32 @@ extension Foundation.URLRequest : CRPSmartBand.CRPURLRequestConvertible {
   public func asURLRequest() throws -> Foundation.URLRequest
 }
 extension Foundation.URLRequest {
-  public init(url: any CRPSmartBand.CRPURLConvertible, method: CRPSmartBand.CRPHTTPMethod, headers: CRPSmartBand.HTTPHeaders? = nil) throws
+  public init(url: CRPSmartBand.CRPURLConvertible, method: CRPSmartBand.CRPHTTPMethod, headers: CRPSmartBand.HTTPHeaders? = nil) throws
 }
 @discardableResult
-public func request(_ url: any CRPSmartBand.CRPURLConvertible, method: CRPSmartBand.CRPHTTPMethod = .get, parameters: CRPSmartBand.CRPParameters? = nil, encoding: any CRPSmartBand.CRPParameterEncoding = CRPURLEncoding.default, headers: CRPSmartBand.HTTPHeaders? = nil) -> CRPSmartBand.CRPDataRequest
+public func request(_ url: CRPSmartBand.CRPURLConvertible, method: CRPSmartBand.CRPHTTPMethod = .get, parameters: CRPSmartBand.CRPParameters? = nil, encoding: CRPSmartBand.CRPParameterEncoding = CRPURLEncoding.default, headers: CRPSmartBand.HTTPHeaders? = nil) -> CRPSmartBand.CRPDataRequest
 @discardableResult
-public func request(_ urlRequest: any CRPSmartBand.CRPURLRequestConvertible) -> CRPSmartBand.CRPDataRequest
+public func request(_ urlRequest: CRPSmartBand.CRPURLRequestConvertible) -> CRPSmartBand.CRPDataRequest
 @discardableResult
-public func download(_ url: any CRPSmartBand.CRPURLConvertible, method: CRPSmartBand.CRPHTTPMethod = .get, parameters: CRPSmartBand.CRPParameters? = nil, encoding: any CRPSmartBand.CRPParameterEncoding = CRPURLEncoding.default, headers: CRPSmartBand.HTTPHeaders? = nil, to destination: CRPSmartBand.CRPDownloadRequest.DownloadFileDestination? = nil) -> CRPSmartBand.CRPDownloadRequest
+public func download(_ url: CRPSmartBand.CRPURLConvertible, method: CRPSmartBand.CRPHTTPMethod = .get, parameters: CRPSmartBand.CRPParameters? = nil, encoding: CRPSmartBand.CRPParameterEncoding = CRPURLEncoding.default, headers: CRPSmartBand.HTTPHeaders? = nil, to destination: CRPSmartBand.CRPDownloadRequest.DownloadFileDestination? = nil) -> CRPSmartBand.CRPDownloadRequest
 @discardableResult
-public func download(_ urlRequest: any CRPSmartBand.CRPURLRequestConvertible, to destination: CRPSmartBand.CRPDownloadRequest.DownloadFileDestination? = nil) -> CRPSmartBand.CRPDownloadRequest
+public func download(_ urlRequest: CRPSmartBand.CRPURLRequestConvertible, to destination: CRPSmartBand.CRPDownloadRequest.DownloadFileDestination? = nil) -> CRPSmartBand.CRPDownloadRequest
 @discardableResult
 public func download(resumingWith resumeData: Foundation.Data, to destination: CRPSmartBand.CRPDownloadRequest.DownloadFileDestination? = nil) -> CRPSmartBand.CRPDownloadRequest
 @discardableResult
-public func upload(_ fileURL: Foundation.URL, to url: any CRPSmartBand.CRPURLConvertible, method: CRPSmartBand.CRPHTTPMethod = .post, headers: CRPSmartBand.HTTPHeaders? = nil) -> CRPSmartBand.CRPUploadRequest
+public func upload(_ fileURL: Foundation.URL, to url: CRPSmartBand.CRPURLConvertible, method: CRPSmartBand.CRPHTTPMethod = .post, headers: CRPSmartBand.HTTPHeaders? = nil) -> CRPSmartBand.CRPUploadRequest
 @discardableResult
-public func upload(_ fileURL: Foundation.URL, with urlRequest: any CRPSmartBand.CRPURLRequestConvertible) -> CRPSmartBand.CRPUploadRequest
+public func upload(_ fileURL: Foundation.URL, with urlRequest: CRPSmartBand.CRPURLRequestConvertible) -> CRPSmartBand.CRPUploadRequest
 @discardableResult
-public func upload(_ data: Foundation.Data, to url: any CRPSmartBand.CRPURLConvertible, method: CRPSmartBand.CRPHTTPMethod = .post, headers: CRPSmartBand.HTTPHeaders? = nil) -> CRPSmartBand.CRPUploadRequest
+public func upload(_ data: Foundation.Data, to url: CRPSmartBand.CRPURLConvertible, method: CRPSmartBand.CRPHTTPMethod = .post, headers: CRPSmartBand.HTTPHeaders? = nil) -> CRPSmartBand.CRPUploadRequest
 @discardableResult
-public func upload(_ data: Foundation.Data, with urlRequest: any CRPSmartBand.CRPURLRequestConvertible) -> CRPSmartBand.CRPUploadRequest
+public func upload(_ data: Foundation.Data, with urlRequest: CRPSmartBand.CRPURLRequestConvertible) -> CRPSmartBand.CRPUploadRequest
 @discardableResult
-public func upload(_ stream: Foundation.InputStream, to url: any CRPSmartBand.CRPURLConvertible, method: CRPSmartBand.CRPHTTPMethod = .post, headers: CRPSmartBand.HTTPHeaders? = nil) -> CRPSmartBand.CRPUploadRequest
+public func upload(_ stream: Foundation.InputStream, to url: CRPSmartBand.CRPURLConvertible, method: CRPSmartBand.CRPHTTPMethod = .post, headers: CRPSmartBand.HTTPHeaders? = nil) -> CRPSmartBand.CRPUploadRequest
 @discardableResult
-public func upload(_ stream: Foundation.InputStream, with urlRequest: any CRPSmartBand.CRPURLRequestConvertible) -> CRPSmartBand.CRPUploadRequest
-public func upload(multipartFormData: @escaping (CRPSmartBand.CRPMultipartFormData) -> Swift.Void, usingThreshold encodingMemoryThreshold: Swift.UInt64 = CRPSessionManager.multipartFormDataEncodingMemoryThreshold, to url: any CRPSmartBand.CRPURLConvertible, method: CRPSmartBand.CRPHTTPMethod = .post, headers: CRPSmartBand.HTTPHeaders? = nil, encodingCompletion: ((CRPSmartBand.CRPSessionManager.MultipartFormDataEncodingResult) -> Swift.Void)?)
-public func upload(multipartFormData: @escaping (CRPSmartBand.CRPMultipartFormData) -> Swift.Void, usingThreshold encodingMemoryThreshold: Swift.UInt64 = CRPSessionManager.multipartFormDataEncodingMemoryThreshold, with urlRequest: any CRPSmartBand.CRPURLRequestConvertible, encodingCompletion: ((CRPSmartBand.CRPSessionManager.MultipartFormDataEncodingResult) -> Swift.Void)?)
+public func upload(_ stream: Foundation.InputStream, with urlRequest: CRPSmartBand.CRPURLRequestConvertible) -> CRPSmartBand.CRPUploadRequest
+public func upload(multipartFormData: @escaping (CRPSmartBand.CRPMultipartFormData) -> Swift.Void, usingThreshold encodingMemoryThreshold: Swift.UInt64 = CRPSessionManager.multipartFormDataEncodingMemoryThreshold, to url: CRPSmartBand.CRPURLConvertible, method: CRPSmartBand.CRPHTTPMethod = .post, headers: CRPSmartBand.HTTPHeaders? = nil, encodingCompletion: ((CRPSmartBand.CRPSessionManager.MultipartFormDataEncodingResult) -> Swift.Void)?)
+public func upload(multipartFormData: @escaping (CRPSmartBand.CRPMultipartFormData) -> Swift.Void, usingThreshold encodingMemoryThreshold: Swift.UInt64 = CRPSessionManager.multipartFormDataEncodingMemoryThreshold, with urlRequest: CRPSmartBand.CRPURLRequestConvertible, encodingCompletion: ((CRPSmartBand.CRPSessionManager.MultipartFormDataEncodingResult) -> Swift.Void)?)
 @available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
 @discardableResult
 public func stream(withHostName hostName: Swift.String, port: Swift.Int) -> CRPSmartBand.CRPStreamRequest
@@ -594,7 +568,6 @@ public func stream(with netService: Foundation.NetService) -> CRPSmartBand.CRPSt
   @objc public func getUInt32(_ start: Swift.Int) -> Swift.UInt32
   @objc public func getBytesBE(_ start: Swift.Int, _ length: Swift.Int) -> Swift.Int
   @objc public func getInt32BE(_ start: Swift.Int, _ length: Swift.Int) -> Swift.Int32
-  @objc public func getGPSInt32BE(_ start: Swift.Int, _ length: Swift.Int) -> Swift.Int32
   @objc public func putData(data: Foundation.Data)
   @objc public func putUInt8(_ value: Swift.UInt8)
   @objc public func putUInt16(_ value: Swift.UInt32)
@@ -610,7 +583,7 @@ public func stream(with netService: Foundation.NetService) -> CRPSmartBand.CRPSt
 extension CRPSmartBand.CRPRequest {
   public enum ValidationResult {
     case success
-    case failure(any Swift.Error)
+    case failure(Swift.Error)
   }
 }
 extension CRPSmartBand.CRPDataRequest {
@@ -640,13 +613,13 @@ extension CRPSmartBand.CRPDownloadRequest {
   public var data: Foundation.Data? {
     get
   }
-  public var error: (any Swift.Error)?
+  public var error: Swift.Error?
   @objc deinit
 }
 @objc @_hasMissingDesignatedInitializers @objcMembers public class CRPScreenTagModel : ObjectiveC.NSObject {
   @objc public var tag_name: Swift.String?
   @objc public var id: Swift.Int
-  @objc public var faces: [CRPSmartBand.CRPScreenModel]
+  public var faces: [CRPSmartBand.CRPScreenModel?]
   @objc deinit
 }
 @objc @_hasMissingDesignatedInitializers @objcMembers public class CRPScreenModel : ObjectiveC.NSObject {
@@ -700,7 +673,7 @@ extension CRPSmartBand.CRPTimeline : Swift.CustomDebugStringConvertible {
 open class CRPSessionManager {
   public enum MultipartFormDataEncodingResult {
     case success(request: CRPSmartBand.CRPUploadRequest, streamingFromDisk: Swift.Bool, streamFileURL: Foundation.URL?)
-    case failure(any Swift.Error)
+    case failure(Swift.Error)
   }
   public static let `default`: CRPSmartBand.CRPSessionManager
   public static let defaultHTTPHeaders: CRPSmartBand.HTTPHeaders
@@ -708,8 +681,8 @@ open class CRPSessionManager {
   final public let session: Foundation.URLSession
   final public let delegate: CRPSmartBand.CRPSessionDelegate
   open var startRequestsImmediately: Swift.Bool
-  open var adapter: (any CRPSmartBand.CRPRequestAdapter)?
-  open var retrier: (any CRPSmartBand.CRPRequestRetrier)? {
+  open var adapter: CRPSmartBand.CRPRequestAdapter?
+  open var retrier: CRPSmartBand.CRPRequestRetrier? {
     get
     set
   }
@@ -718,29 +691,29 @@ open class CRPSessionManager {
   public init?(session: Foundation.URLSession, delegate: CRPSmartBand.CRPSessionDelegate, serverTrustPolicyManager: CRPSmartBand.CRPServerTrustPolicyManager? = nil)
   @objc deinit
   @discardableResult
-  open func request(_ url: any CRPSmartBand.CRPURLConvertible, method: CRPSmartBand.CRPHTTPMethod = .get, parameters: CRPSmartBand.CRPParameters? = nil, encoding: any CRPSmartBand.CRPParameterEncoding = CRPURLEncoding.default, headers: CRPSmartBand.HTTPHeaders? = nil) -> CRPSmartBand.CRPDataRequest
+  open func request(_ url: CRPSmartBand.CRPURLConvertible, method: CRPSmartBand.CRPHTTPMethod = .get, parameters: CRPSmartBand.CRPParameters? = nil, encoding: CRPSmartBand.CRPParameterEncoding = CRPURLEncoding.default, headers: CRPSmartBand.HTTPHeaders? = nil) -> CRPSmartBand.CRPDataRequest
   @discardableResult
-  open func request(_ urlRequest: any CRPSmartBand.CRPURLRequestConvertible) -> CRPSmartBand.CRPDataRequest
+  open func request(_ urlRequest: CRPSmartBand.CRPURLRequestConvertible) -> CRPSmartBand.CRPDataRequest
   @discardableResult
-  open func download(_ url: any CRPSmartBand.CRPURLConvertible, method: CRPSmartBand.CRPHTTPMethod = .get, parameters: CRPSmartBand.CRPParameters? = nil, encoding: any CRPSmartBand.CRPParameterEncoding = CRPURLEncoding.default, headers: CRPSmartBand.HTTPHeaders? = nil, to destination: CRPSmartBand.CRPDownloadRequest.DownloadFileDestination? = nil) -> CRPSmartBand.CRPDownloadRequest
+  open func download(_ url: CRPSmartBand.CRPURLConvertible, method: CRPSmartBand.CRPHTTPMethod = .get, parameters: CRPSmartBand.CRPParameters? = nil, encoding: CRPSmartBand.CRPParameterEncoding = CRPURLEncoding.default, headers: CRPSmartBand.HTTPHeaders? = nil, to destination: CRPSmartBand.CRPDownloadRequest.DownloadFileDestination? = nil) -> CRPSmartBand.CRPDownloadRequest
   @discardableResult
-  open func download(_ urlRequest: any CRPSmartBand.CRPURLRequestConvertible, to destination: CRPSmartBand.CRPDownloadRequest.DownloadFileDestination? = nil) -> CRPSmartBand.CRPDownloadRequest
+  open func download(_ urlRequest: CRPSmartBand.CRPURLRequestConvertible, to destination: CRPSmartBand.CRPDownloadRequest.DownloadFileDestination? = nil) -> CRPSmartBand.CRPDownloadRequest
   @discardableResult
   open func download(resumingWith resumeData: Foundation.Data, to destination: CRPSmartBand.CRPDownloadRequest.DownloadFileDestination? = nil) -> CRPSmartBand.CRPDownloadRequest
   @discardableResult
-  open func upload(_ fileURL: Foundation.URL, to url: any CRPSmartBand.CRPURLConvertible, method: CRPSmartBand.CRPHTTPMethod = .post, headers: CRPSmartBand.HTTPHeaders? = nil) -> CRPSmartBand.CRPUploadRequest
+  open func upload(_ fileURL: Foundation.URL, to url: CRPSmartBand.CRPURLConvertible, method: CRPSmartBand.CRPHTTPMethod = .post, headers: CRPSmartBand.HTTPHeaders? = nil) -> CRPSmartBand.CRPUploadRequest
   @discardableResult
-  open func upload(_ fileURL: Foundation.URL, with urlRequest: any CRPSmartBand.CRPURLRequestConvertible) -> CRPSmartBand.CRPUploadRequest
+  open func upload(_ fileURL: Foundation.URL, with urlRequest: CRPSmartBand.CRPURLRequestConvertible) -> CRPSmartBand.CRPUploadRequest
   @discardableResult
-  open func upload(_ data: Foundation.Data, to url: any CRPSmartBand.CRPURLConvertible, method: CRPSmartBand.CRPHTTPMethod = .post, headers: CRPSmartBand.HTTPHeaders? = nil) -> CRPSmartBand.CRPUploadRequest
+  open func upload(_ data: Foundation.Data, to url: CRPSmartBand.CRPURLConvertible, method: CRPSmartBand.CRPHTTPMethod = .post, headers: CRPSmartBand.HTTPHeaders? = nil) -> CRPSmartBand.CRPUploadRequest
   @discardableResult
-  open func upload(_ data: Foundation.Data, with urlRequest: any CRPSmartBand.CRPURLRequestConvertible) -> CRPSmartBand.CRPUploadRequest
+  open func upload(_ data: Foundation.Data, with urlRequest: CRPSmartBand.CRPURLRequestConvertible) -> CRPSmartBand.CRPUploadRequest
   @discardableResult
-  open func upload(_ stream: Foundation.InputStream, to url: any CRPSmartBand.CRPURLConvertible, method: CRPSmartBand.CRPHTTPMethod = .post, headers: CRPSmartBand.HTTPHeaders? = nil) -> CRPSmartBand.CRPUploadRequest
+  open func upload(_ stream: Foundation.InputStream, to url: CRPSmartBand.CRPURLConvertible, method: CRPSmartBand.CRPHTTPMethod = .post, headers: CRPSmartBand.HTTPHeaders? = nil) -> CRPSmartBand.CRPUploadRequest
   @discardableResult
-  open func upload(_ stream: Foundation.InputStream, with urlRequest: any CRPSmartBand.CRPURLRequestConvertible) -> CRPSmartBand.CRPUploadRequest
-  open func upload(multipartFormData: @escaping (CRPSmartBand.CRPMultipartFormData) -> Swift.Void, usingThreshold encodingMemoryThreshold: Swift.UInt64 = CRPSessionManager.multipartFormDataEncodingMemoryThreshold, to url: any CRPSmartBand.CRPURLConvertible, method: CRPSmartBand.CRPHTTPMethod = .post, headers: CRPSmartBand.HTTPHeaders? = nil, encodingCompletion: ((CRPSmartBand.CRPSessionManager.MultipartFormDataEncodingResult) -> Swift.Void)?)
-  open func upload(multipartFormData: @escaping (CRPSmartBand.CRPMultipartFormData) -> Swift.Void, usingThreshold encodingMemoryThreshold: Swift.UInt64 = CRPSessionManager.multipartFormDataEncodingMemoryThreshold, with urlRequest: any CRPSmartBand.CRPURLRequestConvertible, encodingCompletion: ((CRPSmartBand.CRPSessionManager.MultipartFormDataEncodingResult) -> Swift.Void)?)
+  open func upload(_ stream: Foundation.InputStream, with urlRequest: CRPSmartBand.CRPURLRequestConvertible) -> CRPSmartBand.CRPUploadRequest
+  open func upload(multipartFormData: @escaping (CRPSmartBand.CRPMultipartFormData) -> Swift.Void, usingThreshold encodingMemoryThreshold: Swift.UInt64 = CRPSessionManager.multipartFormDataEncodingMemoryThreshold, to url: CRPSmartBand.CRPURLConvertible, method: CRPSmartBand.CRPHTTPMethod = .post, headers: CRPSmartBand.HTTPHeaders? = nil, encodingCompletion: ((CRPSmartBand.CRPSessionManager.MultipartFormDataEncodingResult) -> Swift.Void)?)
+  open func upload(multipartFormData: @escaping (CRPSmartBand.CRPMultipartFormData) -> Swift.Void, usingThreshold encodingMemoryThreshold: Swift.UInt64 = CRPSessionManager.multipartFormDataEncodingMemoryThreshold, with urlRequest: CRPSmartBand.CRPURLRequestConvertible, encodingCompletion: ((CRPSmartBand.CRPSessionManager.MultipartFormDataEncodingResult) -> Swift.Void)?)
   @available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
   @discardableResult
   open func stream(withHostName hostName: Swift.String, port: Swift.Int) -> CRPSmartBand.CRPStreamRequest
@@ -752,9 +725,9 @@ public struct CRPDefaultDataResponse {
   public let request: Foundation.URLRequest?
   public let response: Foundation.HTTPURLResponse?
   public let data: Foundation.Data?
-  public let error: (any Swift.Error)?
+  public let error: Swift.Error?
   public let timeline: CRPSmartBand.CRPTimeline
-  public init(request: Foundation.URLRequest?, response: Foundation.HTTPURLResponse?, data: Foundation.Data?, error: (any Swift.Error)?, timeline: CRPSmartBand.CRPTimeline = CRPTimeline(), metrics: Swift.AnyObject? = nil)
+  public init(request: Foundation.URLRequest?, response: Foundation.HTTPURLResponse?, data: Foundation.Data?, error: Swift.Error?, timeline: CRPSmartBand.CRPTimeline = CRPTimeline(), metrics: Swift.AnyObject? = nil)
 }
 public struct CRPDataResponse<Value> {
   public let request: Foundation.URLRequest?
@@ -765,7 +738,7 @@ public struct CRPDataResponse<Value> {
   public var value: Value? {
     get
   }
-  public var error: (any Swift.Error)? {
+  public var error: Swift.Error? {
     get
   }
   public init(request: Foundation.URLRequest?, response: Foundation.HTTPURLResponse?, data: Foundation.Data?, result: CRPSmartBand.CRPResult<Value>, timeline: CRPSmartBand.CRPTimeline = CRPTimeline())
@@ -781,8 +754,8 @@ extension CRPSmartBand.CRPDataResponse : Swift.CustomStringConvertible, Swift.Cu
 extension CRPSmartBand.CRPDataResponse {
   public func map<T>(_ transform: (Value) -> T) -> CRPSmartBand.CRPDataResponse<T>
   public func flatMap<T>(_ transform: (Value) throws -> T) -> CRPSmartBand.CRPDataResponse<T>
-  public func mapError<E>(_ transform: (any Swift.Error) -> E) -> CRPSmartBand.CRPDataResponse<Value> where E : Swift.Error
-  public func flatMapError<E>(_ transform: (any Swift.Error) throws -> E) -> CRPSmartBand.CRPDataResponse<Value> where E : Swift.Error
+  public func mapError<E>(_ transform: (Swift.Error) -> E) -> CRPSmartBand.CRPDataResponse<Value> where E : Swift.Error
+  public func flatMapError<E>(_ transform: (Swift.Error) throws -> E) -> CRPSmartBand.CRPDataResponse<Value> where E : Swift.Error
 }
 public struct CRPDefaultDownloadResponse {
   public let request: Foundation.URLRequest?
@@ -790,9 +763,9 @@ public struct CRPDefaultDownloadResponse {
   public let temporaryURL: Foundation.URL?
   public let destinationURL: Foundation.URL?
   public let resumeData: Foundation.Data?
-  public let error: (any Swift.Error)?
+  public let error: Swift.Error?
   public let timeline: CRPSmartBand.CRPTimeline
-  public init(request: Foundation.URLRequest?, response: Foundation.HTTPURLResponse?, temporaryURL: Foundation.URL?, destinationURL: Foundation.URL?, resumeData: Foundation.Data?, error: (any Swift.Error)?, timeline: CRPSmartBand.CRPTimeline = CRPTimeline(), metrics: Swift.AnyObject? = nil)
+  public init(request: Foundation.URLRequest?, response: Foundation.HTTPURLResponse?, temporaryURL: Foundation.URL?, destinationURL: Foundation.URL?, resumeData: Foundation.Data?, error: Swift.Error?, timeline: CRPSmartBand.CRPTimeline = CRPTimeline(), metrics: Swift.AnyObject? = nil)
 }
 public struct CRPDownloadResponse<Value> {
   public let request: Foundation.URLRequest?
@@ -805,7 +778,7 @@ public struct CRPDownloadResponse<Value> {
   public var value: Value? {
     get
   }
-  public var error: (any Swift.Error)? {
+  public var error: Swift.Error? {
     get
   }
   public init(request: Foundation.URLRequest?, response: Foundation.HTTPURLResponse?, temporaryURL: Foundation.URL?, destinationURL: Foundation.URL?, resumeData: Foundation.Data?, result: CRPSmartBand.CRPResult<Value>, timeline: CRPSmartBand.CRPTimeline = CRPTimeline())
@@ -821,8 +794,8 @@ extension CRPSmartBand.CRPDownloadResponse : Swift.CustomStringConvertible, Swif
 extension CRPSmartBand.CRPDownloadResponse {
   public func map<T>(_ transform: (Value) -> T) -> CRPSmartBand.CRPDownloadResponse<T>
   public func flatMap<T>(_ transform: (Value) throws -> T) -> CRPSmartBand.CRPDownloadResponse<T>
-  public func mapError<E>(_ transform: (any Swift.Error) -> E) -> CRPSmartBand.CRPDownloadResponse<Value> where E : Swift.Error
-  public func flatMapError<E>(_ transform: (any Swift.Error) throws -> E) -> CRPSmartBand.CRPDownloadResponse<Value> where E : Swift.Error
+  public func mapError<E>(_ transform: (Swift.Error) -> E) -> CRPSmartBand.CRPDownloadResponse<Value> where E : Swift.Error
+  public func flatMapError<E>(_ transform: (Swift.Error) throws -> E) -> CRPSmartBand.CRPDownloadResponse<Value> where E : Swift.Error
 }
 @available(iOS 10.0, macOS 10.12, tvOS 10.0, *)
 extension CRPSmartBand.CRPDefaultDataResponse {
@@ -849,7 +822,7 @@ extension CRPSmartBand.CRPDownloadResponse {
   }
 }
 @objc @_inheritsConvenienceInitializers open class CRPSessionDelegate : ObjectiveC.NSObject {
-  open var sessionDidBecomeInvalidWithError: ((Foundation.URLSession, (any Swift.Error)?) -> Swift.Void)?
+  open var sessionDidBecomeInvalidWithError: ((Foundation.URLSession, Swift.Error?) -> Swift.Void)?
   open var sessionDidReceiveChallenge: ((Foundation.URLSession, Foundation.URLAuthenticationChallenge) -> (Foundation.URLSession.AuthChallengeDisposition, Foundation.URLCredential?))?
   open var sessionDidReceiveChallengeWithCompletion: ((Foundation.URLSession, Foundation.URLAuthenticationChallenge, @escaping (Foundation.URLSession.AuthChallengeDisposition, Foundation.URLCredential?) -> Swift.Void) -> Swift.Void)?
   open var sessionDidFinishEventsForBackgroundURLSession: ((Foundation.URLSession) -> Swift.Void)?
@@ -860,7 +833,7 @@ extension CRPSmartBand.CRPDownloadResponse {
   open var taskNeedNewBodyStream: ((Foundation.URLSession, Foundation.URLSessionTask) -> Foundation.InputStream?)?
   open var taskNeedNewBodyStreamWithCompletion: ((Foundation.URLSession, Foundation.URLSessionTask, @escaping (Foundation.InputStream?) -> Swift.Void) -> Swift.Void)?
   open var taskDidSendBodyData: ((Foundation.URLSession, Foundation.URLSessionTask, Swift.Int64, Swift.Int64, Swift.Int64) -> Swift.Void)?
-  open var taskDidComplete: ((Foundation.URLSession, Foundation.URLSessionTask, (any Swift.Error)?) -> Swift.Void)?
+  open var taskDidComplete: ((Foundation.URLSession, Foundation.URLSessionTask, Swift.Error?) -> Swift.Void)?
   open var dataTaskDidReceiveResponse: ((Foundation.URLSession, Foundation.URLSessionDataTask, Foundation.URLResponse) -> Foundation.URLSession.ResponseDisposition)?
   open var dataTaskDidReceiveResponseWithCompletion: ((Foundation.URLSession, Foundation.URLSessionDataTask, Foundation.URLResponse, @escaping (Foundation.URLSession.ResponseDisposition) -> Swift.Void) -> Swift.Void)?
   open var dataTaskDidBecomeDownloadTask: ((Foundation.URLSession, Foundation.URLSessionDataTask, Foundation.URLSessionDownloadTask) -> Swift.Void)?
@@ -899,7 +872,7 @@ extension CRPSmartBand.CRPDownloadResponse {
   @objc deinit
 }
 extension CRPSmartBand.CRPSessionDelegate : Foundation.URLSessionDelegate {
-  @objc dynamic open func urlSession(_ session: Foundation.URLSession, didBecomeInvalidWithError error: (any Swift.Error)?)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, didBecomeInvalidWithError error: Swift.Error?)
   @objc dynamic open func urlSession(_ session: Foundation.URLSession, didReceive challenge: Foundation.URLAuthenticationChallenge, completionHandler: @escaping (Foundation.URLSession.AuthChallengeDisposition, Foundation.URLCredential?) -> Swift.Void)
   @objc dynamic open func urlSessionDidFinishEvents(forBackgroundURLSession session: Foundation.URLSession)
 }
@@ -910,7 +883,7 @@ extension CRPSmartBand.CRPSessionDelegate : Foundation.URLSessionTaskDelegate {
   @objc dynamic open func urlSession(_ session: Foundation.URLSession, task: Foundation.URLSessionTask, didSendBodyData bytesSent: Swift.Int64, totalBytesSent: Swift.Int64, totalBytesExpectedToSend: Swift.Int64)
   @available(iOS 10.0, macOS 10.12, tvOS 10.0, *)
   @objc(URLSession:task:didFinishCollectingMetrics:) dynamic open func urlSession(_ session: Foundation.URLSession, task: Foundation.URLSessionTask, didFinishCollecting metrics: Foundation.URLSessionTaskMetrics)
-  @objc dynamic open func urlSession(_ session: Foundation.URLSession, task: Foundation.URLSessionTask, didCompleteWithError error: (any Swift.Error)?)
+  @objc dynamic open func urlSession(_ session: Foundation.URLSession, task: Foundation.URLSessionTask, didCompleteWithError error: Swift.Error?)
 }
 extension CRPSmartBand.CRPSessionDelegate : Foundation.URLSessionDataDelegate {
   @objc dynamic open func urlSession(_ session: Foundation.URLSession, dataTask: Foundation.URLSessionDataTask, didReceive response: Foundation.URLResponse, completionHandler: @escaping (Foundation.URLSession.ResponseDisposition) -> Swift.Void)
@@ -949,7 +922,7 @@ extension CRPSmartBand.CRPSessionDelegate : Foundation.URLSessionStreamDelegate 
   @objc public static let mh08ServiceUUID: CoreBluetooth.CBUUID
   @objc public var OTAWirteQueue: Dispatch.DispatchQueue
   @objc public static let sharedInstance: CRPSmartBand.CRPBle
-  @objc open var delegate: (any CRPSmartBand.BleProtocol)?
+  @objc open var delegate: CRPSmartBand.BleProtocol?
   @objc open func scanWithDuration(_ duration: Foundation.TimeInterval = 3, progressHandler: CRPSmartBand.scanProgressHandler?, completionHandler: CRPSmartBand.scanCompletionHandler?)
   @objc open func breakScan()
   @objc open func disConnect()
@@ -960,16 +933,16 @@ extension CRPSmartBand.CRPSessionDelegate : Foundation.URLSessionStreamDelegate 
   @objc open func centralManagerDidUpdateState(_ central: CoreBluetooth.CBCentralManager)
   @objc open func centralManager(_ central: CoreBluetooth.CBCentralManager, didConnect peripheral: CoreBluetooth.CBPeripheral)
   @objc public func centralManager(_ central: CoreBluetooth.CBCentralManager, willRestoreState dict: [Swift.String : Any])
-  @objc open func centralManager(_ central: CoreBluetooth.CBCentralManager, didDisconnectPeripheral peripheral: CoreBluetooth.CBPeripheral, error: (any Swift.Error)?)
-  @objc public func centralManager(_ central: CoreBluetooth.CBCentralManager, didFailToConnect peripheral: CoreBluetooth.CBPeripheral, error: (any Swift.Error)?)
+  @objc open func centralManager(_ central: CoreBluetooth.CBCentralManager, didDisconnectPeripheral peripheral: CoreBluetooth.CBPeripheral, error: Swift.Error?)
+  @objc public func centralManager(_ central: CoreBluetooth.CBCentralManager, didFailToConnect peripheral: CoreBluetooth.CBPeripheral, error: Swift.Error?)
   @objc open func centralManager(_ central: CoreBluetooth.CBCentralManager, didDiscover peripheral: CoreBluetooth.CBPeripheral, advertisementData: [Swift.String : Any], rssi RSSI: Foundation.NSNumber)
   @objc open func centralManager(_ central: CoreBluetooth.CBCentralManager, didRetrievePeripherals peripherals: CoreBluetooth.CBPeripheral)
-  @objc open func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didUpdateNotificationStateFor characteristic: CoreBluetooth.CBCharacteristic, error: (any Swift.Error)?)
-  @objc open func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didUpdateValueFor characteristic: CoreBluetooth.CBCharacteristic, error: (any Swift.Error)?)
-  @objc open func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didWriteValueFor characteristic: CoreBluetooth.CBCharacteristic, error: (any Swift.Error)?)
-  @objc open func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didReadRSSI RSSI: Foundation.NSNumber, error: (any Swift.Error)?)
-  @objc public func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didDiscoverServices error: (any Swift.Error)?)
-  @objc open func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didDiscoverCharacteristicsFor service: CoreBluetooth.CBService, error: (any Swift.Error)?)
+  @objc open func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didUpdateNotificationStateFor characteristic: CoreBluetooth.CBCharacteristic, error: Swift.Error?)
+  @objc open func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didUpdateValueFor characteristic: CoreBluetooth.CBCharacteristic, error: Swift.Error?)
+  @objc open func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didWriteValueFor characteristic: CoreBluetooth.CBCharacteristic, error: Swift.Error?)
+  @objc open func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didReadRSSI RSSI: Foundation.NSNumber, error: Swift.Error?)
+  @objc public func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didDiscoverServices error: Swift.Error?)
+  @objc open func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didDiscoverCharacteristicsFor service: CoreBluetooth.CBService, error: Swift.Error?)
   @objc deinit
 }
 @objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers open class HTXBle : ObjectiveC.NSObject, CoreBluetooth.CBCentralManagerDelegate, CoreBluetooth.CBPeripheralDelegate {
@@ -978,19 +951,19 @@ extension CRPSmartBand.CRPSessionDelegate : Foundation.URLSessionStreamDelegate 
   public static let ttServiceUUID: CoreBluetooth.CBUUID
   public static let mh08ServiceUUID: CoreBluetooth.CBUUID
   public static let sharedInstance: CRPSmartBand.HTXBle
-  open var delegate: (any CRPSmartBand.BleProtocol)?
+  open var delegate: CRPSmartBand.BleProtocol?
   open func scanWithDuration(_ duration: Foundation.TimeInterval = 3, progressHandler: CRPSmartBand.scanProgressHandler?, completionHandler: CRPSmartBand.scanCompletionHandler?)
   open func breakScan()
   open func disConnect()
   @objc open func centralManagerDidUpdateState(_ central: CoreBluetooth.CBCentralManager)
   @objc open func centralManager(_ central: CoreBluetooth.CBCentralManager, didConnect peripheral: CoreBluetooth.CBPeripheral)
-  @objc open func centralManager(_ central: CoreBluetooth.CBCentralManager, didDisconnectPeripheral peripheral: CoreBluetooth.CBPeripheral, error: (any Swift.Error)?)
+  @objc open func centralManager(_ central: CoreBluetooth.CBCentralManager, didDisconnectPeripheral peripheral: CoreBluetooth.CBPeripheral, error: Swift.Error?)
   @objc open func centralManager(_ central: CoreBluetooth.CBCentralManager, didDiscover peripheral: CoreBluetooth.CBPeripheral, advertisementData: [Swift.String : Any], rssi RSSI: Foundation.NSNumber)
-  @objc open func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didUpdateNotificationStateFor characteristic: CoreBluetooth.CBCharacteristic, error: (any Swift.Error)?)
-  @objc open func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didUpdateValueFor characteristic: CoreBluetooth.CBCharacteristic, error: (any Swift.Error)?)
-  @objc public func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didDiscoverServices error: (any Swift.Error)?)
-  @objc open func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didDiscoverCharacteristicsFor service: CoreBluetooth.CBService, error: (any Swift.Error)?)
-  @objc public func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didWriteValueFor descriptor: CoreBluetooth.CBDescriptor, error: (any Swift.Error)?)
+  @objc open func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didUpdateNotificationStateFor characteristic: CoreBluetooth.CBCharacteristic, error: Swift.Error?)
+  @objc open func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didUpdateValueFor characteristic: CoreBluetooth.CBCharacteristic, error: Swift.Error?)
+  @objc public func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didDiscoverServices error: Swift.Error?)
+  @objc open func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didDiscoverCharacteristicsFor service: CoreBluetooth.CBService, error: Swift.Error?)
+  @objc public func peripheral(_ peripheral: CoreBluetooth.CBPeripheral, didWriteValueFor descriptor: CoreBluetooth.CBDescriptor, error: Swift.Error?)
   @objc deinit
 }
 @objc @_inheritsConvenienceInitializers open class HTXUpgrade : ObjectiveC.NSObject, OTAFramework.OtaDelegate {
@@ -1005,7 +978,7 @@ extension CRPSmartBand.CRPSessionDelegate : Foundation.URLSessionStreamDelegate 
 }
 @objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers public class CRPSmartBandSDK : ObjectiveC.NSObject, CRPSmartBand.CRPManagerDelegate {
   @objc public static let sharedInstance: CRPSmartBand.CRPSmartBandSDK
-  @objc open var delegate: (any CRPSmartBand.CRPManagerDelegate)?
+  @objc open var delegate: CRPSmartBand.CRPManagerDelegate?
   open var hasBlood: Swift.Int!
   @objc open var currentCRPDiscovery: CRPSmartBand.CRPDiscovery? {
     @objc get
@@ -1034,8 +1007,8 @@ extension CRPSmartBand.CRPSessionDelegate : Foundation.URLSessionStreamDelegate 
   @objc public func receivePhoneNumber(number: Swift.String)
   @objc public func receiveMedicineInfo(_ max: Swift.Int, _ model: CRPSmartBand.CRPMedicineReminderModel?)
   @objc public func receiveSportList(_ list: [CRPSmartBand.CRPSportRecord])
-  @objc public func receiveSportState(_ state: CRPSmartBand.SportType, _ err: Swift.Int)
-  @objc public func receiveConnectConfirm(_ state: CRPSmartBand.CRPPairState)
+  @objc public func receiveSportState(_ state: CRPSmartBand.SportType)
+  @objc public func receiveConnectConfirm(_ state: Swift.Int)
   @objc public func receiveStress(_ stress: Swift.Int)
   @objc public func receiveHRV(_ hrv: Swift.Int)
   @objc public func receiveGPSDataRecordList(time: [Swift.Int])
@@ -1044,17 +1017,6 @@ extension CRPSmartBand.CRPSessionDelegate : Foundation.URLSessionStreamDelegate 
   @objc public func receiveEPORequest(type: Swift.Int)
   @objc public func receiveEPOSync(_ state: CRPSmartBand.CRPUpgradeState, _ progress: Swift.Int)
   @objc public func receiveRealTimeSportData(data: CRPSmartBand.CRPNewSportingModel)
-  @objc public func receiveExitCameraView()
-  @objc public func receiveAddDrinkWaterRecord(record: CRPSmartBand.CRPNewDrinkWaterRecord)
-  @objc public func receiveModifyDrinkWaterRecord(source: CRPSmartBand.CRPDrinkWaterSource, record: CRPSmartBand.CRPNewDrinkWaterRecord)
-  @objc public func receiveDeleteDrinkWaterRecord(source: CRPSmartBand.CRPDrinkWaterSource, recordID: Swift.Int)
-  @objc public func receiveRequestAppDrinkWaterRecord()
-  @objc public func receiveStockRequestUpdateInfo()
-  @objc public func receiveGPTState(type: CRPSmartBand.CRPGPTType, state: CRPSmartBand.CRPGPTRequestState, result: Foundation.NSData)
-  @objc public func receiveRequestGPTAnswer()
-  @objc public func receiveRequestGPTPreviewImage(imageSize: CoreFoundation.CGSize)
-  @objc public func receiveRequestGPTImage()
-  @objc public func receiveSOS()
   @objc open func scan(_ duration: Foundation.TimeInterval = 3, progressHandler: CRPSmartBand.scanProgressHandler?, completionHandler: CRPSmartBand.scanCompletionHandler?)
   @objc open func interruptScan()
   @objc open func connet(_ discovery: CRPSmartBand.CRPDiscovery)
@@ -1135,7 +1097,7 @@ extension CRPSmartBand.CRPSessionDelegate : Foundation.URLSessionStreamDelegate 
   @objc open func stopChangeScreen()
   @objc open func setupScreenContent(content: CRPSmartBand.ScreenContent)
   @objc open func setStepLength(length: Swift.Int)
-  @objc open func setTime(_ timestamp: Swift.Int = 0)
+  @objc open func setTime()
   @objc open func switchCameraView()
   @objc open func connectedPeripherial() -> [CoreBluetooth.CBPeripheral]
   @objc open func shutDown()
@@ -1228,8 +1190,6 @@ extension CRPSmartBand.CRPSessionDelegate : Foundation.URLSessionStreamDelegate 
   @objc open func setA2DPControl(state: Swift.Int)
   @objc open func getTalkBluetoothName(_ handler: @escaping CRPSmartBand.stringHandler)
   @objc open func connectConfirm(data: [Swift.UInt8])
-  @objc open func connectConfirmByRandomCode(randomCode: Swift.Int)
-  @objc open func setPairReply(allow: Swift.Bool)
   @objc open func getNotificationSupportType(_ handler: @escaping CRPSmartBand.notificationsHandler)
   @objc open func getNotificationState(_ handler: @escaping CRPSmartBand.notificationsHandler)
   @objc open func setNotificationState(_ states: [Swift.Int])
@@ -1260,7 +1220,6 @@ extension CRPSmartBand.CRPSessionDelegate : Foundation.URLSessionStreamDelegate 
   @objc open func getGPSDataRecordList()
   @objc open func getGPSRecordData(time: Swift.Int, _ handler: @escaping CRPSmartBand.gpsDataHandler)
   @objc open func startSyncEPO(path: Swift.String, type: Swift.Int)
-  @objc open func startSyncEPOWithSDK(type: Swift.Int)
   @objc open func syncGPSAuxiliary(local: CoreLocation.CLLocationCoordinate2D)
   @objc open func getHistoryStepData(day: Swift.Int, handler: @escaping CRPSmartBand.historyStpeHander)
   @objc open func getHistorySleepData(day: Swift.Int, handler: @escaping CRPSmartBand.historySleepHandler)
@@ -1288,68 +1247,6 @@ extension CRPSmartBand.CRPSessionDelegate : Foundation.URLSessionStreamDelegate 
   @objc open func getNewWatchFaceList(tag_id: Swift.Int, ver: Swift.String, supportModel: [Swift.Int], currentPage: Swift.Int, perPage: Swift.Int, memorySize: Swift.Int, platform: CRPSmartBand.CRPPlatform, model: CRPSmartBand.CRPScreenMarketVersionModel, _ handler: @escaping CRPSmartBand.watchFaceListHandler)
   @objc open func getNewWatchFaceInfo(screenId: Swift.Int, ver: Swift.String, supportModel: [Swift.Int], memorySize: Swift.Int, platform: CRPSmartBand.CRPPlatform, model: CRPSmartBand.CRPScreenMarketVersionModel, _ handler: @escaping CRPSmartBand.watchFaceInfoHandler)
   @objc open func getNewWatchFaceSupportModel(_ handler: @escaping CRPSmartBand.newWatchFaceSupportHandler)
-  @objc open func setCalendar(calendar: CRPSmartBand.CRPCalendarModel)
-  @objc open func getCalendar(id: Swift.Int, handler: @escaping CRPSmartBand.calendarHandler)
-  @objc open func deleteCalendar(id: Swift.Int)
-  @objc open func getCalendarConfig(handler: @escaping CRPSmartBand.calendarConfigHandler)
-  @objc open func setCalendarReminder(model: CRPSmartBand.CRPCalendarRemindModel)
-  @objc open func getCalendarReminder(handler: @escaping CRPSmartBand.calendarRemindHandler)
-  @objc open func deleteAllCalendar()
-  @objc open func getWorldClockInfo(_ handler: @escaping CRPSmartBand.worldClockProfileHandler)
-  @objc open func getWorldClockDetail(id: Swift.Int, _ handler: @escaping CRPSmartBand.worldClockInfoHandler)
-  @objc open func setWorldClock(worldClock: CRPSmartBand.CRPWorldClockModel)
-  @objc open func deleteWorldClock(id: Swift.Int)
-  @objc open func setWorldClockSequence(ids: [Swift.Int])
-  @objc open func setClearWorldClock()
-  @objc open func getBrightnessInfo(_ handler: @escaping CRPSmartBand.brightnessInfoHandler)
-  @objc open func setBrightness(value: Swift.Int)
-  @objc open func getEmergencyContact(_ handler: @escaping CRPSmartBand.emergencyContactHandler)
-  @objc open func setEmergencyContact(contact: CRPSmartBand.CRPEmergencyContact)
-  @objc open func setDrinkWaterGoal(goal: Swift.Int)
-  @objc open func getDrinkWaterGoal(_ handler: @escaping CRPSmartBand.intHandler)
-  @objc open func setTodayDrinkWaterTotalValue(value: Swift.Int)
-  @objc open func getTodayDrinkWaterTotalValue(_ handler: @escaping CRPSmartBand.intHandler)
-  @objc open func addDrinkWater(record: CRPSmartBand.CRPNewDrinkWaterRecord)
-  @objc open func modifyDrinkWater(source: CRPSmartBand.CRPDrinkWaterSource, record: CRPSmartBand.CRPNewDrinkWaterRecord)
-  @objc open func deleteDrinkWater(source: CRPSmartBand.CRPDrinkWaterSource, recordID: Swift.Int)
-  @objc open func getDrinkWaterRecord(_ handler: @escaping CRPSmartBand.drinkWaterRecordHandler)
-  @objc open func setDrinkWaterRecord(records: [CRPSmartBand.CRPNewDrinkWaterRecord])
-  @objc open func readNewDrinkWaterRemind(_ handler: @escaping CRPSmartBand.newDrinkWaterRemindHandler)
-  @objc open func setNewDrinkWaterRemind(model: CRPSmartBand.CRPNewDrinkWaterRemind)
-  @objc open func setSOSSwitch(open: Swift.Bool)
-  @objc open func getSOSSwitch(_ handler: @escaping CRPSmartBand.intHandler)
-  @objc open func getStockSupportInfo(_ handler: @escaping CRPSmartBand.intHandler)
-  @objc open func setNullStockData()
-  @objc open func setStockData(data: CRPSmartBand.CRPStockSelectionModel)
-  @objc open func deleteStock(id: Swift.Int)
-  @objc open func setStockSequence(ids: [Swift.Int])
-  @objc open func getGPTSupportType(_ handler: @escaping CRPSmartBand.gptSupportTypeHandler)
-  @objc open func setGPTState(type: CRPSmartBand.CRPGPTType, state: CRPSmartBand.CRPGPTReplyState)
-  @objc open func setGPTQuestion(type: CRPSmartBand.CRPGPTType, content: Swift.String)
-  @objc open func setGPTAnswer(content: Swift.String)
-  @objc open func setGPTPreImage(image: UIKit.UIImage)
-  @objc open func stopGPTPreImage()
-  @objc open func startGPTScreen(_ image: UIKit.UIImage, _ imageSize: CRPSmartBand.ScreenImageSize, _ isCricle: Swift.Bool = false, _ compressionType: Swift.Int)
-  @objc open func stopGPTScreen()
-  @objc open func getGPTScreenContent(_ handler: @escaping CRPSmartBand.screenContentHandler)
-  @objc open func setupGPTScreenContent(content: CRPSmartBand.ScreenContent)
-  @objc open func getMultityScreenMarketList(handler: @escaping CRPSmartBand.intsHandler)
-  @objc open func deleteMultityScreenMarket(ids: [Swift.Int])
-  @objc open func setTasbihReminder(model: CRPSmartBand.CRPTasbihReminderModel)
-  @objc open func getTasbihReminder(_ handler: @escaping CRPSmartBand.tasbihReminderHandler)
-  @objc open func setPrayerLocationInfo(local: CoreLocation.CLLocationCoordinate2D)
-  @objc open func setAllahName(ids: [Swift.Int])
-  @objc open func setCancelAllahName(ids: [Swift.Int])
-  @objc open func getAllahName(_ handler: @escaping CRPSmartBand.intsHandler)
-  @objc open func setDuas(ids: [Swift.Int])
-  @objc open func setCancelDuas(ids: [Swift.Int])
-  @objc open func getDuas(_ handler: @escaping CRPSmartBand.intsHandler)
-  @objc open func setDuasRemindeSwitch(model: CRPSmartBand.CRPPrayerTimingReminderModel)
-  @objc open func getDuasRemindeSwitch(_ handler: @escaping CRPSmartBand.prayerTimingsHandler)
-  @objc open func setDuascalcMethods(model: CRPSmartBand.CRPPrayerTimingCalculationModel)
-  @objc open func getDuascalcMethods(_ handler: @escaping CRPSmartBand.prayerTimingsCalculationHandler)
-  @objc open func getNapsSleep(_ handler: @escaping CRPSmartBand.napsSleepHandler)
-  @objc open func getNapsSleepHistory(day: Swift.Int, handler: @escaping CRPSmartBand.historyNapsSleepHandler)
   @objc deinit
 }
 open class CRPMultipartFormData {
@@ -1487,7 +1384,7 @@ indirect public enum CRPErrorHandle : Swift.Error {
   case busy
   case timeout
   case interrupted
-  case internalError(underlyingError: (any Swift.Error)?)
+  case internalError(underlyingError: Swift.Error?)
   case noCentralManagerSet
   case other
 }
@@ -1546,7 +1443,6 @@ indirect public enum CRPErrorHandle : Swift.Error {
   @objc public var deep: Swift.Int
   @objc public var light: Swift.Int
   @objc public var detail: [Swift.Dictionary<Swift.String, Swift.String>]
-  @objc public var timestamp: Swift.Int
   @objc public init(deep: Swift.Int, light: Swift.Int, detail: [Swift.Dictionary<Swift.String, Swift.String>])
   @objc deinit
 }
@@ -1803,22 +1699,6 @@ indirect public enum CRPErrorHandle : Swift.Error {
   case Gaana = 44
   case MissCall = 45
   case WhatsAppBusiness = 46
-  case Dingtalk = 47
-  case Tiktok = 48
-  case Lyft = 49
-  case Mail = 50
-  case GoogleMaps = 51
-  case Slack = 52
-  case MicrosoftTeams = 53
-  case MormaiiSmartwatches = 54
-  case Reddit = 55
-  case Discord = 56
-  case Calendar = 57
-  case Gojek = 58
-  case Lark = 59
-  case Garb = 60
-  case Shopee = 61
-  case Tokopedia = 62
   case others = 0x80
   public init?(rawValue: Swift.Int)
   public typealias RawValue = Swift.Int
@@ -2041,12 +1921,6 @@ public func getCurrentLanguage() -> Swift.String
   @objc public init(contactID: Swift.Int, fullName: Swift.String, image: UIKit.UIImage, phoneNumber: Swift.String)
   @objc deinit
 }
-@objc @objcMembers public class CRPEmergencyContact : ObjectiveC.NSObject {
-  @objc final public let name: Swift.String
-  @objc final public let phoneNumber: Swift.String
-  @objc public init(name: Swift.String, phoneNumber: Swift.String)
-  @objc deinit
-}
 @objc @objcMembers public class CRPHRVDataModel : ObjectiveC.NSObject {
   @objc public var time: Swift.Double
   @objc public var sportLevel: Swift.Int
@@ -2106,8 +1980,6 @@ public func getCurrentLanguage() -> Swift.String
   @objc public var distance: Swift.Int
   @objc public var kcal: Swift.Int
   @objc public var heartRate: [Swift.Int]
-  @objc public var cadences: [Swift.Int]
-  @objc public var strides: [Swift.Int]
   @objc deinit
 }
 @objc @_hasMissingDesignatedInitializers @objcMembers public class CRPSportRecord : ObjectiveC.NSObject {
@@ -2177,7 +2049,6 @@ public func getCurrentLanguage() -> Swift.String
   @objc deinit
 }
 @objc @_hasMissingDesignatedInitializers @objcMembers public class CRPNewSportingModel : ObjectiveC.NSObject {
-  @objc public var startTime: Swift.Int
   @objc public var type: CRPSmartBand.CRPSportState
   @objc public var heartRate: Swift.Int
   @objc public var step: Swift.Int
@@ -2190,208 +2061,6 @@ public func getCurrentLanguage() -> Swift.String
   case unStart = 0
   case exercising = 1
   case pause = 2
-  public init?(rawValue: Swift.Int)
-  public typealias RawValue = Swift.Int
-  public var rawValue: Swift.Int {
-    get
-  }
-}
-@objc @_hasMissingDesignatedInitializers @objcMembers public class CRPWorldClockProfileModel : ObjectiveC.NSObject {
-  @objc final public let limitCount: Swift.Int
-  @objc final public let ids: [Swift.Int]
-  @objc deinit
-}
-@objc @objcMembers public class CRPWorldClockModel : ObjectiveC.NSObject {
-  @objc public var id: Swift.Int
-  @objc public var timeInterval: Swift.Int
-  @objc public var cityName: Swift.String
-  @objc public var longitude: Swift.Double
-  @objc public var latitude: Swift.Double
-  @objc public init(id: Swift.Int, timeInterval: Swift.Int, cityName: Swift.String, longitude: Swift.Double, latitude: Swift.Double)
-  @objc deinit
-}
-@objc @_hasMissingDesignatedInitializers @objcMembers public class CRPBrightnessModel : ObjectiveC.NSObject {
-  @objc public var brightness: Swift.Int
-  @objc public var maxBrightness: Swift.Int
-  @objc deinit
-}
-@objc @objcMembers public class CRPNewDrinkWaterRemind : ObjectiveC.NSObject {
-  @objc public var isRemind: Swift.Bool
-  @objc public var startHour: Swift.Int
-  @objc public var startMinute: Swift.Int
-  @objc public var remindCount: Swift.Int
-  @objc public var remindTimeInterval: Swift.Int
-  @objc public init(isRemind: Swift.Bool, startHour: Swift.Int, startMinute: Swift.Int, remindCount: Swift.Int, remindTimeInterval: Swift.Int)
-  @objc deinit
-}
-@objc public enum CRPDrinkWaterSource : Swift.Int {
-  case app = 0
-  case watch = 1
-  public init?(rawValue: Swift.Int)
-  public typealias RawValue = Swift.Int
-  public var rawValue: Swift.Int {
-    get
-  }
-}
-@objc @objcMembers public class CRPNewDrinkWaterRecord : ObjectiveC.NSObject {
-  @objc public var id: Swift.Int
-  @objc public var hour: Swift.Int
-  @objc public var minute: Swift.Int
-  @objc public var waterIntake: Swift.Int
-  @objc public init(id: Swift.Int, hour: Swift.Int, minute: Swift.Int, waterIntake: Swift.Int)
-  @objc deinit
-}
-@objc @objcMembers public class CRPStockSelectionModel : ObjectiveC.NSObject {
-  @objc public var id: Swift.Int
-  @objc public var regularMarketOpen: Swift.Double
-  @objc public var regularMarketDayHigh: Swift.Double
-  @objc public var regularMarketDayLow: Swift.Double
-  @objc public var regularMarketVolume: Swift.Int
-  @objc public var peRatio: Swift.Double
-  @objc public var marketCap: Swift.Int
-  @objc public var fiftyTwoWeekHigh: Swift.Double
-  @objc public var fiftyTwoWeekLow: Swift.Double
-  @objc public var averageDailyVolume3Month: Swift.Int
-  @objc public var regularMarketPrice: Swift.Double
-  @objc public var currency: Swift.String
-  @objc public var shortName: Swift.String
-  @objc public var symbol: Swift.String
-  @objc public var exchange: Swift.String
-  @objc public var regularMarketPreviousClose: Swift.Double
-  @objc public var isOpen: Swift.Bool
-  @objc public init(id: Swift.Int, regularMarketOpen: Swift.Double, regularMarketDayHigh: Swift.Double, regularMarketDayLow: Swift.Double, regularMarketVolume: Swift.Int, peRatio: Swift.Double, marketCap: Swift.Int, fiftyTwoWeekHigh: Swift.Double, fiftyTwoWeekLow: Swift.Double, averageDailyVolume3Month: Swift.Int, regularMarketPrice: Swift.Double, currency: Swift.String, shortName: Swift.String, symbol: Swift.String, exchange: Swift.String, regularMarketPreviousClose: Swift.Double, isOpen: Swift.Bool)
-  @objc deinit
-}
-@objc public enum CRPGPTRequestState : Swift.Int {
-  case ready
-  case cancel
-  case parseFail
-  case parseSuccess
-  public init?(rawValue: Swift.Int)
-  public typealias RawValue = Swift.Int
-  public var rawValue: Swift.Int {
-    get
-  }
-}
-@objc public enum CRPGPTReplyState : Swift.UInt8 {
-  case ready = 0x02
-  case noNetWork = 0x0B
-  case nomMcrophone = 0x09
-  case chatgptAPIFail = 0x0C
-  case speechFail = 0x0A
-  public init?(rawValue: Swift.UInt8)
-  public typealias RawValue = Swift.UInt8
-  public var rawValue: Swift.UInt8 {
-    get
-  }
-}
-@objc public enum CRPGPTType : Swift.Int {
-  case none = 0
-  case chat = 1
-  case aiWatchFace = 2
-  public init?(rawValue: Swift.Int)
-  public typealias RawValue = Swift.Int
-  public var rawValue: Swift.Int {
-    get
-  }
-}
-@objc public enum GPTShowType : Swift.Int {
-  case none = 0
-  case DaGPT = 1
-  case AIWatch = 2
-  case DaGPTWithAIWatch = 3
-  public init?(rawValue: Swift.Int)
-  public typealias RawValue = Swift.Int
-  public var rawValue: Swift.Int {
-    get
-  }
-}
-@objc public enum CRPPairState : Swift.Int {
-  case fail = 0
-  case success = 1
-  case wairPair = 0xFF
-  public init?(rawValue: Swift.Int)
-  public typealias RawValue = Swift.Int
-  public var rawValue: Swift.Int {
-    get
-  }
-}
-@objc @objcMembers public class CRPCalendarModel : ObjectiveC.NSObject {
-  @objc public var id: Swift.Int
-  @objc public var title: Swift.String
-  @objc public var startTime: Foundation.Date
-  @objc public var endTime: Foundation.Date
-  @objc public init(id: Swift.Int, title: Swift.String, startTime: Foundation.Date, endTime: Foundation.Date)
-  @objc deinit
-}
-@objc @_hasMissingDesignatedInitializers @objcMembers public class CRPCalendarConfigModel : ObjectiveC.NSObject {
-  @objc final public let limit: Swift.Int
-  @objc final public let records: [CRPSmartBand.CRPCalendarRecordModel]
-  @objc deinit
-}
-@objc @_hasMissingDesignatedInitializers @objcMembers public class CRPCalendarRecordModel : ObjectiveC.NSObject {
-  @objc final public let id: Swift.Int
-  @objc final public let time: Swift.Int
-  @objc deinit
-}
-@objc @objcMembers public class CRPCalendarRemindModel : ObjectiveC.NSObject {
-  @objc public var isRemind: Swift.Bool
-  @objc public var remindTime: Swift.Int
-  @objc public init(isRemind: Swift.Bool, remindTime: Swift.Int)
-  @objc deinit
-}
-@objc @objcMembers public class CRPTasbihReminderModel : ObjectiveC.NSObject {
-  @objc public var isTasbihReminder: Swift.Bool
-  @objc public var intervalTime: Swift.Int
-  @objc public var weekday: [Swift.Int]
-  @objc public var startHour: Swift.Int
-  @objc public var startMin: Swift.Int
-  @objc public var endHour: Swift.Int
-  @objc public var endMin: Swift.Int
-  @objc public init(isTasbihReminder: Swift.Bool, intervalTime: Swift.Int, weekday: [Swift.Int], startHour: Swift.Int, startMin: Swift.Int, endHour: Swift.Int, endMin: Swift.Int)
-  @objc deinit
-}
-@objc @objcMembers public class CRPPrayerTimingReminderModel : ObjectiveC.NSObject {
-  @objc public var isReminder: Swift.Bool
-  @objc public var prayerTimeState: [Swift.Int]
-  @objc public init(isReminder: Swift.Bool, prayerTimeState: [Swift.Int])
-  @objc deinit
-}
-@objc @objcMembers public class CRPPrayerTimingCalculationModel : ObjectiveC.NSObject {
-  @objc public var calcMethod: CRPSmartBand.CRPPrayerTimingsCalculationMethod
-  @objc public var asrMethod: CRPSmartBand.CRPJuristicMethod
-  @objc public init(calcMethod: CRPSmartBand.CRPPrayerTimingsCalculationMethod, asrMethod: CRPSmartBand.CRPJuristicMethod)
-  @objc deinit
-}
-@objc public enum CRPPrayerTimingsCalculationMethod : Swift.Int {
-  case Jafari = 0
-  case Karachi = 1
-  case MWL = 2
-  case ISNA = 3
-  case Makkah = 4
-  public init?(rawValue: Swift.Int)
-  public typealias RawValue = Swift.Int
-  public var rawValue: Swift.Int {
-    get
-  }
-}
-@objc public enum CRPJuristicMethod : Swift.Int {
-  case Shafii = 0
-  case Hanafi = 1
-  case none = 2
-  public init?(rawValue: Swift.Int)
-  public typealias RawValue = Swift.Int
-  public var rawValue: Swift.Int {
-    get
-  }
-}
-@objc public enum CRPPrayerTimeName : Swift.Int {
-  case Fajr = 0
-  case Sunrise = 1
-  case Dhuhr = 2
-  case Asr = 3
-  case Maghrib = 4
-  case Isha = 5
   public init?(rawValue: Swift.Int)
   public typealias RawValue = Swift.Int
   public var rawValue: Swift.Int {
@@ -2451,41 +2120,26 @@ public typealias screenMarketVersionInfoHandler = ((_ model: CRPSmartBand.CRPScr
 public typealias watchFaceTagListHandler = ((_ tagList: [CRPSmartBand.CRPScreenTagModel], _ error: CRPSmartBand.CRPError) -> Swift.Void)
 public typealias watchFaceListHandler = ((_ list: [CRPSmartBand.CRPScreenModel], _ error: CRPSmartBand.CRPError) -> Swift.Void)
 public typealias watchFaceInfoHandler = ((_ watchFaceInfo: CRPSmartBand.CRPScreenModelInfo?, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias worldClockProfileHandler = ((_ model: CRPSmartBand.CRPWorldClockProfileModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias worldClockInfoHandler = ((_ model: CRPSmartBand.CRPWorldClockModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias brightnessInfoHandler = ((_ model: CRPSmartBand.CRPBrightnessModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias emergencyContactHandler = ((_ contact: CRPSmartBand.CRPEmergencyContact, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias drinkWaterRecordHandler = ((_ records: [CRPSmartBand.CRPNewDrinkWaterRecord], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias newDrinkWaterRemindHandler = ((_ model: CRPSmartBand.CRPNewDrinkWaterRemind, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias gptSupportTypeHandler = ((_ type: CRPSmartBand.GPTShowType, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias calendarHandler = ((_ model: CRPSmartBand.CRPCalendarModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias calendarConfigHandler = ((_ model: CRPSmartBand.CRPCalendarConfigModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias calendarRemindHandler = ((_ model: CRPSmartBand.CRPCalendarRemindModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias tasbihReminderHandler = ((_ model: CRPSmartBand.CRPTasbihReminderModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias prayerTimingsHandler = ((_ model: CRPSmartBand.CRPPrayerTimingReminderModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias prayerTimingsCalculationHandler = ((_ model: CRPSmartBand.CRPPrayerTimingCalculationModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias napsSleepHandler = ((_ napSleepModel: [CRPSmartBand.CRPNapsSleep], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias historyNapsSleepHandler = ((_ day: Swift.Int, _ napSleepModel: [CRPSmartBand.CRPNapsSleep], _ error: CRPSmartBand.CRPError) -> Swift.Void)
 public enum CRPAFError : Swift.Error {
   public enum ParameterEncodingFailureReason {
     case missingURL
-    case jsonEncodingFailed(error: any Swift.Error)
-    case propertyListEncodingFailed(error: any Swift.Error)
+    case jsonEncodingFailed(error: Swift.Error)
+    case propertyListEncodingFailed(error: Swift.Error)
   }
   public enum MultipartEncodingFailureReason {
     case bodyPartURLInvalid(url: Foundation.URL)
     case bodyPartFilenameInvalid(in: Foundation.URL)
     case bodyPartFileNotReachable(at: Foundation.URL)
-    case bodyPartFileNotReachableWithError(atURL: Foundation.URL, error: any Swift.Error)
+    case bodyPartFileNotReachableWithError(atURL: Foundation.URL, error: Swift.Error)
     case bodyPartFileIsDirectory(at: Foundation.URL)
     case bodyPartFileSizeNotAvailable(at: Foundation.URL)
-    case bodyPartFileSizeQueryFailedWithError(forURL: Foundation.URL, error: any Swift.Error)
+    case bodyPartFileSizeQueryFailedWithError(forURL: Foundation.URL, error: Swift.Error)
     case bodyPartInputStreamCreationFailed(for: Foundation.URL)
     case outputStreamCreationFailed(for: Foundation.URL)
     case outputStreamFileAlreadyExists(at: Foundation.URL)
     case outputStreamURLInvalid(url: Foundation.URL)
-    case outputStreamWriteFailed(error: any Swift.Error)
-    case inputStreamReadFailed(error: any Swift.Error)
+    case outputStreamWriteFailed(error: Swift.Error)
+    case inputStreamReadFailed(error: Swift.Error)
   }
   public enum ResponseValidationFailureReason {
     case dataFileNil
@@ -2500,10 +2154,10 @@ public enum CRPAFError : Swift.Error {
     case inputFileNil
     case inputFileReadFailed(at: Foundation.URL)
     case stringSerializationFailed(encoding: Swift.String.Encoding)
-    case jsonSerializationFailed(error: any Swift.Error)
-    case propertyListSerializationFailed(error: any Swift.Error)
+    case jsonSerializationFailed(error: Swift.Error)
+    case propertyListSerializationFailed(error: Swift.Error)
   }
-  case invalidURL(url: any CRPSmartBand.CRPURLConvertible)
+  case invalidURL(url: CRPSmartBand.CRPURLConvertible)
   case parameterEncodingFailed(reason: CRPSmartBand.CRPAFError.ParameterEncodingFailureReason)
   case multipartEncodingFailed(reason: CRPSmartBand.CRPAFError.MultipartEncodingFailureReason)
   case responseValidationFailed(reason: CRPSmartBand.CRPAFError.ResponseValidationFailureReason)
@@ -2527,13 +2181,13 @@ extension CRPSmartBand.CRPAFError {
   }
 }
 extension CRPSmartBand.CRPAFError {
-  public var urlConvertible: (any CRPSmartBand.CRPURLConvertible)? {
+  public var urlConvertible: CRPSmartBand.CRPURLConvertible? {
     get
   }
   public var url: Foundation.URL? {
     get
   }
-  public var underlyingError: (any Swift.Error)? {
+  public var underlyingError: Swift.Error? {
     get
   }
   public var acceptableContentTypes: [Swift.String]? {
@@ -2558,10 +2212,10 @@ extension CRPSmartBand.CRPAFError : Foundation.LocalizedError {
   @objc public static let sharedInstance: CRPSmartBand.RealTekUpgrade
   @objc override dynamic public init()
   @objc open func startUpgrade(info: CRPSmartBand.newVersionInfo?, timeoutInterval: Foundation.TimeInterval = 5)
-  @objc public func dfuUpgrade(_ task: RTKOTASDK.RTKDFUUpgrade, didFinishUpgradeWithError error: (any Swift.Error)?)
+  @objc public func dfuUpgrade(_ task: RTKOTASDK.RTKDFUUpgrade, didFinishUpgradeWithError error: Swift.Error?)
   @objc public func dfuUpgradeDidReady(for task: RTKOTASDK.RTKDFUUpgrade)
   @objc public func dfuUpgrade(_ task: RTKOTASDK.RTKDFUUpgrade, withDevice connection: RTKLEFoundation.RTKProfileConnection, didSendBytesCount length: Swift.UInt, ofImage image: RTKOTASDK.RTKOTAUpgradeBin)
-  @objc public func dfuUpgrade(_ task: RTKOTASDK.RTKDFUUpgrade, couldNotUpgradeWithError error: any Swift.Error)
+  @objc public func dfuUpgrade(_ task: RTKOTASDK.RTKDFUUpgrade, couldNotUpgradeWithError error: Swift.Error)
   @objc public func dfuUpgrade(_ task: RTKOTASDK.RTKDFUUpgrade, withDevice connection: RTKLEFoundation.RTKProfileConnection, willSendImage image: RTKOTASDK.RTKOTAUpgradeBin)
   @objc public func dfuUpgrade(_ task: RTKOTASDK.RTKDFUUpgrade, withDevice connection: RTKLEFoundation.RTKProfileConnection, didCompleteSendImage image: RTKOTASDK.RTKOTAUpgradeBin)
   @objc public func dfuUpgrade(_ task: RTKOTASDK.RTKDFUUpgrade, withDevice connection: RTKLEFoundation.RTKProfileConnection, didActivateImages images: Swift.Set<RTKOTASDK.RTKOTAUpgradeBin>)
@@ -2650,30 +2304,3 @@ extension CRPSmartBand.ecgState : Swift.RawRepresentable {}
 extension CRPSmartBand.CRPSportState : Swift.Equatable {}
 extension CRPSmartBand.CRPSportState : Swift.Hashable {}
 extension CRPSmartBand.CRPSportState : Swift.RawRepresentable {}
-extension CRPSmartBand.CRPDrinkWaterSource : Swift.Equatable {}
-extension CRPSmartBand.CRPDrinkWaterSource : Swift.Hashable {}
-extension CRPSmartBand.CRPDrinkWaterSource : Swift.RawRepresentable {}
-extension CRPSmartBand.CRPGPTRequestState : Swift.Equatable {}
-extension CRPSmartBand.CRPGPTRequestState : Swift.Hashable {}
-extension CRPSmartBand.CRPGPTRequestState : Swift.RawRepresentable {}
-extension CRPSmartBand.CRPGPTReplyState : Swift.Equatable {}
-extension CRPSmartBand.CRPGPTReplyState : Swift.Hashable {}
-extension CRPSmartBand.CRPGPTReplyState : Swift.RawRepresentable {}
-extension CRPSmartBand.CRPGPTType : Swift.Equatable {}
-extension CRPSmartBand.CRPGPTType : Swift.Hashable {}
-extension CRPSmartBand.CRPGPTType : Swift.RawRepresentable {}
-extension CRPSmartBand.GPTShowType : Swift.Equatable {}
-extension CRPSmartBand.GPTShowType : Swift.Hashable {}
-extension CRPSmartBand.GPTShowType : Swift.RawRepresentable {}
-extension CRPSmartBand.CRPPairState : Swift.Equatable {}
-extension CRPSmartBand.CRPPairState : Swift.Hashable {}
-extension CRPSmartBand.CRPPairState : Swift.RawRepresentable {}
-extension CRPSmartBand.CRPPrayerTimingsCalculationMethod : Swift.Equatable {}
-extension CRPSmartBand.CRPPrayerTimingsCalculationMethod : Swift.Hashable {}
-extension CRPSmartBand.CRPPrayerTimingsCalculationMethod : Swift.RawRepresentable {}
-extension CRPSmartBand.CRPJuristicMethod : Swift.Equatable {}
-extension CRPSmartBand.CRPJuristicMethod : Swift.Hashable {}
-extension CRPSmartBand.CRPJuristicMethod : Swift.RawRepresentable {}
-extension CRPSmartBand.CRPPrayerTimeName : Swift.Equatable {}
-extension CRPSmartBand.CRPPrayerTimeName : Swift.Hashable {}
-extension CRPSmartBand.CRPPrayerTimeName : Swift.RawRepresentable {}
