@@ -13,6 +13,13 @@ framework module CRPSmartBand {
       export *
   }
   
+  explicit module opus_Public{
+      header "opus.h"
+      header "opus_types.h"
+      header "opus_defines.h"
+      export *
+  }
+  
 }
 
 
