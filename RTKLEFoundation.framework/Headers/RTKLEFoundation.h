@@ -5,8 +5,7 @@
 //  Created by jerome_gu on 2019/1/7.
 //  Copyright © 2022 Realtek. All rights reserved.
 //
-
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 //! Project version number for RTKLEFoundation.
 FOUNDATION_EXPORT double RTKLEFoundationVersionNumber;
@@ -17,6 +16,7 @@ FOUNDATION_EXPORT const unsigned char RTKLEFoundationVersionString[];
 // In this header, you should import all the public headers of your framework using statements like #import <RTKLEFoundation/PublicHeader.h>
 
 #import <RTKLEFoundation/RTKBTGeneralDefines.h>
+#import <RTKLEFoundation/RTKAsynchronousInvocation.h>
 
 #import <RTKLEFoundation/RTKProfileConnectionManager.h>
 #import <RTKLEFoundation/RTKProfileConnection.h>
@@ -42,8 +42,8 @@ FOUNDATION_EXPORT const unsigned char RTKLEFoundationVersionString[];
 /* UI */
 //#import <RTKLEFoundation/RTKScanPeripheralViewController.h>
 
-#import <RTKLEFoundation/RTKFile.h>
-#import <RTKLEFoundation/RTKFileBrowseViewController.h>
+//#import <RTKLEFoundation/RTKFile.h>
+//#import <RTKLEFoundation/RTKFileBrowseViewController.h>
 
 /* Utilities */
 
