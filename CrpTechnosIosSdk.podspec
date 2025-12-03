@@ -30,7 +30,7 @@ Pod::Spec.new do |s|
   # s.swift_version = '5.0'
   
   # 上传framewrok
-  s.vendored_frameworks = 'CRPSmartBand.framework', 'OTAFramework.framework', 'SpeexKit.framework', 'JLBmpConvertKit.framework', 'JLLogHelper.framework', 'RTKLEFoundation.framework', 'RTKOTASDK.framework'
+  s.vendored_frameworks = 'CRPSmartBand.framework', 'OTAFramework.framework', 'SpeexKit.framework', 'JLBmpConvertKit.framework', 'JLLogHelper.framework'
   s.vendored_libraries = 'libopus.a'
 
   # 上传源文件
