@@ -1,7 +1,7 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 6.0.2 effective-5.10 (swiftlang-6.0.2.1.2 clang-1600.0.26.4)
-// swift-module-flags: -target arm64-apple-ios9.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-bare-slash-regex -module-name CRPSmartBand
-// swift-module-flags-ignorable: -no-verify-emitted-module-interface
+// swift-compiler-version: Apple Swift version 6.1.2 effective-5.10 (swiftlang-6.1.2.1.2 clang-1700.0.13.5)
+// swift-module-flags: -target arm64-apple-ios9.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -module-name CRPSmartBand
+// swift-module-flags-ignorable: -no-verify-emitted-module-interface -interface-compiler-version 6.1.2
 @_exported import CRPSmartBand
 import CoreBluetooth
 import CoreLocation
@@ -1446,6 +1446,7 @@ extension CRPSmartBand.CRPSessionDelegate : Foundation.URLSessionStreamDelegate 
   @objc open func setTideBeachPrevision(tide: CRPSmartBand.CRPTideBeachPrevision)
   @objc open func deleteTideBeach(id: Swift.Int)
   @objc open func clearTideBeach()
+  @objc open func setPhoneSportInfo(distance: Swift.Int)
   @objc deinit
 }
 open class CRPMultipartFormData {
@@ -2940,99 +2941,99 @@ public func getCurrentLanguage() -> Swift.String
     get
   }
 }
-public typealias scanCompletionHandler = ((_ result: [CRPSmartBand.CRPDiscovery]?, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias scanProgressHandler = ((_ newDiscoveries: [CRPSmartBand.CRPDiscovery]) -> Swift.Void)
-public typealias bindHandler = ((_ state: CRPSmartBand.CRPState, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias removeHandler = ((_ state: CRPSmartBand.CRPState, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias stepHandler = ((_ stepModel: CRPSmartBand.StepModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias sleepHandler = ((_ sleepModel: CRPSmartBand.SleepModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias allDataHandler = ((_ stepModels: [CRPSmartBand.StepModel], _ sleepModels: [CRPSmartBand.SleepModel], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias intHandler = ((_ value: Swift.Int, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias intsHandler = ((_ value: [Swift.Int], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias stringHandler = ((_ value: Swift.String, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias stringsHandler = ((_ value: [Swift.String], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias featuresHandler = ((_ value: [Swift.Int], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias featuresHandlerForOC = ((_ value: [CRPSmartBand.CRPFeature], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias profileHandler = ((_ value: CRPSmartBand.ProfileModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias alarmHandler = ((_ value: [CRPSmartBand.AlarmModel], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias notificationsHandler = ((_ value: [Swift.Int], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias sportHandler = ((_ sportModels: [CRPSmartBand.SportModel], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias periodTimeHandler = ((_ periodTime: CRPSmartBand.periodTimeModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias versionHandler = ((_ info: CRPSmartBand.newVersionInfo?, _ tpInfo: CRPSmartBand.newVersionTpInfo?, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias screenContentHandler = ((_ content: CRPSmartBand.ScreenContent, _ imageSize: CRPSmartBand.ScreenImageSize, _ compressionType: Swift.Int, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias connectedPeripherialHandler = ((_ peripherals: [CoreBluetooth.CBPeripheral], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias watchFaceHandler = ((_ watchFace: [CRPSmartBand.watchFaceInfo], _ total: Swift.Int, _ count: Swift.Int, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias watchFaceSupportHandler = ((_ supportModel: CRPSmartBand.watchFaceSupportModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias newWatchFaceSupportHandler = ((_ supportModel: CRPSmartBand.CRPNewWatchFaceSupportModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
+public typealias scanCompletionHandler = (_ result: [CRPSmartBand.CRPDiscovery]?, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias scanProgressHandler = (_ newDiscoveries: [CRPSmartBand.CRPDiscovery]) -> Swift.Void
+public typealias bindHandler = (_ state: CRPSmartBand.CRPState, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias removeHandler = (_ state: CRPSmartBand.CRPState, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias stepHandler = (_ stepModel: CRPSmartBand.StepModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias sleepHandler = (_ sleepModel: CRPSmartBand.SleepModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias allDataHandler = (_ stepModels: [CRPSmartBand.StepModel], _ sleepModels: [CRPSmartBand.SleepModel], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias intHandler = (_ value: Swift.Int, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias intsHandler = (_ value: [Swift.Int], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias stringHandler = (_ value: Swift.String, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias stringsHandler = (_ value: [Swift.String], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias featuresHandler = (_ value: [Swift.Int], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias featuresHandlerForOC = (_ value: [CRPSmartBand.CRPFeature], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias profileHandler = (_ value: CRPSmartBand.ProfileModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias alarmHandler = (_ value: [CRPSmartBand.AlarmModel], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias notificationsHandler = (_ value: [Swift.Int], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias sportHandler = (_ sportModels: [CRPSmartBand.SportModel], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias periodTimeHandler = (_ periodTime: CRPSmartBand.periodTimeModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias versionHandler = (_ info: CRPSmartBand.newVersionInfo?, _ tpInfo: CRPSmartBand.newVersionTpInfo?, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias screenContentHandler = (_ content: CRPSmartBand.ScreenContent, _ imageSize: CRPSmartBand.ScreenImageSize, _ compressionType: Swift.Int, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias connectedPeripherialHandler = (_ peripherals: [CoreBluetooth.CBPeripheral], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias watchFaceHandler = (_ watchFace: [CRPSmartBand.watchFaceInfo], _ total: Swift.Int, _ count: Swift.Int, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias watchFaceSupportHandler = (_ supportModel: CRPSmartBand.watchFaceSupportModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias newWatchFaceSupportHandler = (_ supportModel: CRPSmartBand.CRPNewWatchFaceSupportModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
 public typealias physiologicalHandler = (_ physiological: CRPSmartBand.Physiological, _ error: CRPSmartBand.CRPError) -> Swift.Void
 public typealias sitRemindHandler = (_ sitRemind: CRPSmartBand.SitRemindModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
-public typealias doublesHandler = ((_ value: [Swift.Double], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias hrRemindHandler = ((_ model: CRPSmartBand.hrRemind, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias reminderHandler = ((_ model: CRPSmartBand.eventRemind, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias drinkWaterHandler = ((_ model: CRPSmartBand.drinkWaterRemind, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias contactProfileHandler = ((_ model: CRPSmartBand.contactProfileModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias hrvDataHandler = ((_ data: CRPSmartBand.CRPHRVDataModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias heartRecordDataHandler = ((_ heartRecordModels: [CRPSmartBand.CRPHeartRecordModel], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias bpRecordDataHandler = ((_ bpRecordModels: [CRPSmartBand.CRPBPRecordModel], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias o2RecordDataHandler = ((_ o2RecordModels: [CRPSmartBand.CRPO2RecordModel], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias sportDetailHandler = ((_ sportModel: CRPSmartBand.CRPNewSportModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias stressRecordDataHandler = ((_ stressRecordModels: [CRPSmartBand.CRPStressRecordModel], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias hrvRecordDataHandler = ((_ hrvRecordModels: [CRPSmartBand.CRPHRVRecordModel], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias exerciseGoalDateHandler = ((_ exerciseGoalsModel: CRPSmartBand.CRPExerciseGoalsModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias exerciseGoalStateHandler = ((_ exerciseGoalsStateModel: CRPSmartBand.CRPExerciseGoalStateModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias eCardProfileHandler = ((_ model: CRPSmartBand.CRPEcardProfileModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias eCardInfoHandler = ((_ model: CRPSmartBand.CRPECard, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias gpsDataHandler = ((_ startTime: Swift.Int, _ locals: [CoreLocation.CLLocationCoordinate2D], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias sleepDetectionInfoHandler = ((_ info: CRPSmartBand.CRPSleepDetectionInfo, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias fulldayDataHanlder = ((_ today: [Swift.Int], _ yesterday: [Swift.Int], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias autoLockTimeHandler = ((_ model: CRPSmartBand.CRPAutoLockTimeModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias historyStpeHander = ((_ day: Swift.Int, _ stepModel: CRPSmartBand.StepModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias historySleepHandler = ((_ day: Swift.Int, _ sleepModel: CRPSmartBand.SleepModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias historyIntsHandler = ((_ day: Swift.Int, _ value: [Swift.Int], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias platformInfoHandler = ((_ model: CRPSmartBand.CRPPlatformModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias screenMarketVersionInfoHandler = ((_ model: CRPSmartBand.CRPScreenMarketVersionModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias watchFaceTagListHandler = ((_ tagList: [CRPSmartBand.CRPScreenTagModel], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias watchFaceListHandler = ((_ list: [CRPSmartBand.CRPScreenModel], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias watchFaceInfoHandler = ((_ watchFaceInfo: CRPSmartBand.CRPScreenModelInfo?, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias worldClockProfileHandler = ((_ model: CRPSmartBand.CRPWorldClockProfileModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias worldClockInfoHandler = ((_ model: CRPSmartBand.CRPWorldClockModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias brightnessInfoHandler = ((_ model: CRPSmartBand.CRPBrightnessModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias emergencyContactHandler = ((_ contact: CRPSmartBand.CRPEmergencyContact, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias drinkWaterRecordHandler = ((_ records: [CRPSmartBand.CRPNewDrinkWaterRecord], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias newDrinkWaterRemindHandler = ((_ model: CRPSmartBand.CRPNewDrinkWaterRemind, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias gptSupportTypeHandler = ((_ type: CRPSmartBand.GPTShowType, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias calendarHandler = ((_ model: CRPSmartBand.CRPCalendarModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias calendarConfigHandler = ((_ model: CRPSmartBand.CRPCalendarConfigModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias calendarRemindHandler = ((_ model: CRPSmartBand.CRPCalendarRemindModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias tasbihReminderHandler = ((_ model: CRPSmartBand.CRPTasbihReminderModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias prayerTimingsHandler = ((_ model: CRPSmartBand.CRPPrayerTimingReminderModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias prayerTimingsCalculationHandler = ((_ model: CRPSmartBand.CRPPrayerTimingCalculationModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias napsSleepHandler = ((_ napSleepModel: [CRPSmartBand.CRPNapsSleep], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias historyNapsSleepHandler = ((_ day: Swift.Int, _ napSleepModel: [CRPSmartBand.CRPNapsSleep], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias jsAppInfoHandler = ((_ model: CRPSmartBand.CRPJSAppInfoModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias fileSystemMemoryHandler = ((_ model: CRPSmartBand.CRPFileSystemMemoryModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias musicInfoHandler = ((_ musics: [CRPSmartBand.CRPLocalMusicModel], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias hsWatchMarketSupportModelHandler = ((_ model: CRPSmartBand.CRPHSWatchFaceSupportModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias watchFaceSizeModelHandler = ((_ model: CRPSmartBand.CRPWatchFaceSizeModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias watchFaceContentProfileModelHandler = ((_ model: CRPSmartBand.CRPWatchFaceContentProfileModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias watchFaceContentInfoModelHandler = ((_ model: CRPSmartBand.CRPWatchFaceContentInfoModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias watchFaceVideoPlayModeHandler = ((_ mode: CRPSmartBand.CRPWatchFaceVideoPlayMode, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias watchFaceTimeStyleModelHandler = ((_ model: CRPSmartBand.CRPWatchFaceTimeStyleModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias localVideoProfileModelHandler = ((_ model: CRPSmartBand.CRPLocalVideoProfileModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias localPhotoAlbumProfileModelHandler = ((_ model: CRPSmartBand.CRPLocalPhotoAlbumProfileModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias localPhotoAlbumMemoryHandler = ((_ model: CRPSmartBand.CRPLocalPhotoAlbumMemoryModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias JLWatchFaceAPIInfoHandler = ((_ model: CRPSmartBand.CRPJLWatchFaceAPIInfoModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias watchFaceContentProfileHandler = ((_ model: CRPSmartBand.CRPJLWatchFaceProfileModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias JLPhotoAlbumWatchFaceProfileHandler = ((_ model: CRPSmartBand.CRPJLPhotoAlbumWatchFaceProfileModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias JLWatchFaceElementHandler = ((_ model: CRPSmartBand.CRPJLWatchFaceElementModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias JLPhotoAlbumWatchFaceInfoHandler = ((_ model: CRPSmartBand.CRPJLPhotoAlbumWatchFaceInfoModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias watchFacePointerListHandler = ((_ list: [CRPSmartBand.CRPWatchFacePointerModel], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias watchFacePointerInfoHandler = ((_ watchFacePointerInfo: CRPSmartBand.CRPWatchFacePointerModel?, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias segmentStepsHandler = ((_ day: Swift.Int, _ models: [CRPSmartBand.StepModel], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias optionsExerciseHandler = ((_ types: [Swift.Int], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias actionButtonInfoHandler = ((_ model: CRPSmartBand.CRPWatchButtonActionInfoModel, _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias gameSupportTypeHandler = ((_ types: [Swift.Int], _ error: CRPSmartBand.CRPError) -> Swift.Void)
-public typealias tideBeachProfileHandler = ((_ profile: CRPSmartBand.CRPTideBeachProfile) -> Swift.Void)
+public typealias doublesHandler = (_ value: [Swift.Double], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias hrRemindHandler = (_ model: CRPSmartBand.hrRemind, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias reminderHandler = (_ model: CRPSmartBand.eventRemind, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias drinkWaterHandler = (_ model: CRPSmartBand.drinkWaterRemind, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias contactProfileHandler = (_ model: CRPSmartBand.contactProfileModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias hrvDataHandler = (_ data: CRPSmartBand.CRPHRVDataModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias heartRecordDataHandler = (_ heartRecordModels: [CRPSmartBand.CRPHeartRecordModel], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias bpRecordDataHandler = (_ bpRecordModels: [CRPSmartBand.CRPBPRecordModel], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias o2RecordDataHandler = (_ o2RecordModels: [CRPSmartBand.CRPO2RecordModel], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias sportDetailHandler = (_ sportModel: CRPSmartBand.CRPNewSportModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias stressRecordDataHandler = (_ stressRecordModels: [CRPSmartBand.CRPStressRecordModel], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias hrvRecordDataHandler = (_ hrvRecordModels: [CRPSmartBand.CRPHRVRecordModel], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias exerciseGoalDateHandler = (_ exerciseGoalsModel: CRPSmartBand.CRPExerciseGoalsModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias exerciseGoalStateHandler = (_ exerciseGoalsStateModel: CRPSmartBand.CRPExerciseGoalStateModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias eCardProfileHandler = (_ model: CRPSmartBand.CRPEcardProfileModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias eCardInfoHandler = (_ model: CRPSmartBand.CRPECard, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias gpsDataHandler = (_ startTime: Swift.Int, _ locals: [CoreLocation.CLLocationCoordinate2D], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias sleepDetectionInfoHandler = (_ info: CRPSmartBand.CRPSleepDetectionInfo, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias fulldayDataHanlder = (_ today: [Swift.Int], _ yesterday: [Swift.Int], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias autoLockTimeHandler = (_ model: CRPSmartBand.CRPAutoLockTimeModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias historyStpeHander = (_ day: Swift.Int, _ stepModel: CRPSmartBand.StepModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias historySleepHandler = (_ day: Swift.Int, _ sleepModel: CRPSmartBand.SleepModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias historyIntsHandler = (_ day: Swift.Int, _ value: [Swift.Int], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias platformInfoHandler = (_ model: CRPSmartBand.CRPPlatformModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias screenMarketVersionInfoHandler = (_ model: CRPSmartBand.CRPScreenMarketVersionModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias watchFaceTagListHandler = (_ tagList: [CRPSmartBand.CRPScreenTagModel], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias watchFaceListHandler = (_ list: [CRPSmartBand.CRPScreenModel], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias watchFaceInfoHandler = (_ watchFaceInfo: CRPSmartBand.CRPScreenModelInfo?, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias worldClockProfileHandler = (_ model: CRPSmartBand.CRPWorldClockProfileModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias worldClockInfoHandler = (_ model: CRPSmartBand.CRPWorldClockModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias brightnessInfoHandler = (_ model: CRPSmartBand.CRPBrightnessModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias emergencyContactHandler = (_ contact: CRPSmartBand.CRPEmergencyContact, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias drinkWaterRecordHandler = (_ records: [CRPSmartBand.CRPNewDrinkWaterRecord], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias newDrinkWaterRemindHandler = (_ model: CRPSmartBand.CRPNewDrinkWaterRemind, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias gptSupportTypeHandler = (_ type: CRPSmartBand.GPTShowType, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias calendarHandler = (_ model: CRPSmartBand.CRPCalendarModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias calendarConfigHandler = (_ model: CRPSmartBand.CRPCalendarConfigModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias calendarRemindHandler = (_ model: CRPSmartBand.CRPCalendarRemindModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias tasbihReminderHandler = (_ model: CRPSmartBand.CRPTasbihReminderModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias prayerTimingsHandler = (_ model: CRPSmartBand.CRPPrayerTimingReminderModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias prayerTimingsCalculationHandler = (_ model: CRPSmartBand.CRPPrayerTimingCalculationModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias napsSleepHandler = (_ napSleepModel: [CRPSmartBand.CRPNapsSleep], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias historyNapsSleepHandler = (_ day: Swift.Int, _ napSleepModel: [CRPSmartBand.CRPNapsSleep], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias jsAppInfoHandler = (_ model: CRPSmartBand.CRPJSAppInfoModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias fileSystemMemoryHandler = (_ model: CRPSmartBand.CRPFileSystemMemoryModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias musicInfoHandler = (_ musics: [CRPSmartBand.CRPLocalMusicModel], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias hsWatchMarketSupportModelHandler = (_ model: CRPSmartBand.CRPHSWatchFaceSupportModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias watchFaceSizeModelHandler = (_ model: CRPSmartBand.CRPWatchFaceSizeModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias watchFaceContentProfileModelHandler = (_ model: CRPSmartBand.CRPWatchFaceContentProfileModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias watchFaceContentInfoModelHandler = (_ model: CRPSmartBand.CRPWatchFaceContentInfoModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias watchFaceVideoPlayModeHandler = (_ mode: CRPSmartBand.CRPWatchFaceVideoPlayMode, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias watchFaceTimeStyleModelHandler = (_ model: CRPSmartBand.CRPWatchFaceTimeStyleModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias localVideoProfileModelHandler = (_ model: CRPSmartBand.CRPLocalVideoProfileModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias localPhotoAlbumProfileModelHandler = (_ model: CRPSmartBand.CRPLocalPhotoAlbumProfileModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias localPhotoAlbumMemoryHandler = (_ model: CRPSmartBand.CRPLocalPhotoAlbumMemoryModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias JLWatchFaceAPIInfoHandler = (_ model: CRPSmartBand.CRPJLWatchFaceAPIInfoModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias watchFaceContentProfileHandler = (_ model: CRPSmartBand.CRPJLWatchFaceProfileModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias JLPhotoAlbumWatchFaceProfileHandler = (_ model: CRPSmartBand.CRPJLPhotoAlbumWatchFaceProfileModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias JLWatchFaceElementHandler = (_ model: CRPSmartBand.CRPJLWatchFaceElementModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias JLPhotoAlbumWatchFaceInfoHandler = (_ model: CRPSmartBand.CRPJLPhotoAlbumWatchFaceInfoModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias watchFacePointerListHandler = (_ list: [CRPSmartBand.CRPWatchFacePointerModel], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias watchFacePointerInfoHandler = (_ watchFacePointerInfo: CRPSmartBand.CRPWatchFacePointerModel?, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias segmentStepsHandler = (_ day: Swift.Int, _ models: [CRPSmartBand.StepModel], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias optionsExerciseHandler = (_ types: [Swift.Int], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias actionButtonInfoHandler = (_ model: CRPSmartBand.CRPWatchButtonActionInfoModel, _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias gameSupportTypeHandler = (_ types: [Swift.Int], _ error: CRPSmartBand.CRPError) -> Swift.Void
+public typealias tideBeachProfileHandler = (_ profile: CRPSmartBand.CRPTideBeachProfile) -> Swift.Void
 public enum CRPAFError : Swift.Error {
   public enum ParameterEncodingFailureReason {
     case missingURL
