@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'CrpTechnosIosSdk'
-  s.version          = '2.0.8'
+  s.version          = '2.0.7'
   s.summary          = 'CRP frameworks.'
 
 # This description is used to generate tags and improve search results.
@@ -30,7 +30,7 @@ Pod::Spec.new do |s|
   # s.swift_version = '5.0'
   
   # 上传framewrok
-  s.vendored_frameworks = 'CRPSmartBand.framework', 'OTAFramework.framework', 'SpeexKit.framework'
+  s.vendored_frameworks = 'CRPSmartBand.framework', 'OTAFramework.framework', 'SpeexKit.framework', 'JLBmpConvertKit.framework', 'JLLogHelper.framework'
   s.vendored_libraries = 'libopus.a'
 
   # 上传源文件
