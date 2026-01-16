@@ -21,7 +21,7 @@ DEPRECATED_MSG_ATTRIBUTE("This class is only used for legacy compatibility. Use 
 @interface RTKCommunicationDataReceiver : NSObject {
     @protected
     BOOL _inProgress;
-    void(^_Nullable _completionHandler)(BOOL success, NSError *_Nullable err, NSData *_Nullable data);
+    void(^_Nullable _completionHandler)(BOOL success, NSError *_Nullable error, NSData *_Nullable data);
 }
 
 @property (nonatomic, readonly) RTKPackageCommunication *communication;

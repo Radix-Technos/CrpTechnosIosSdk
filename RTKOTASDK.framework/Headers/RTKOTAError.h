@@ -14,7 +14,7 @@
 /// The domain for OTA errors.
 extern NSErrorDomain const RTKOTAErrorDomain;
 
-/// RTKOTAErrorDomain Error code
+/// Error codes defined within `RTKOTAErrorDomain` domain.
 typedef NS_ENUM(NSInteger, RTKOTAErrorCode) {
     // MARK: - deprecated error code begin
     RTKOTAErrorUnknown,                                     ///< Unknown error
@@ -92,8 +92,10 @@ typedef NS_ENUM(NSInteger, RTKOTAErrorCode) {
     RTKOTAErrorDeviceDataInvalid,                           ///< The data received from device is not valid.
     RTKOTAErrorAttributeReadFailure,                        ///< Wait for reading characteristic value time out.
     RTKOTAErrorOTAModeEnter,                                ///< Request device to switch to OTA mode fail.
+    RTKOTAErrorIncorrectBud,                                ///< The currently connected bud to be upgraded is incorrect.
     
     RTKOTAErrorCompanionDiscovery,                          ///< Discover for companion device fail.
+    RTKOTAInvalidCallException,                             ///< Invalid method call.
 };
 
 #endif /* RTKOTAError_h */

@@ -27,7 +27,7 @@ typedef void (^RTKCommunicationSendResult)(BOOL success, NSError *_Nullable erro
 /**
  *
  */
-typedef void (^RTKCommunicationRequestResult)(BOOL success, NSError *_Nullable err, NSData*_Nullable response);
+typedef void (^RTKCommunicationRequestResult)(BOOL success, NSError *_Nullable error, NSData*_Nullable response);
 
 typedef NS_ENUM(NSUInteger, RTKPackageCommunicationStatus) {
     RTKPackageCommunicationStatusNotOpen,

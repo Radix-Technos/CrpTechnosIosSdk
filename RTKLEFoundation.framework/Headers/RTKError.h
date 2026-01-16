@@ -15,8 +15,8 @@ extern NSExceptionName const RTKInvalidCallException;
 
 extern NSErrorDomain const RTKBTErrorDomain;
 
-/* RTKBTErrorDomain Error code */
-typedef enum : NSUInteger {
+/// RTKBTErrorDomain Error code
+typedef NS_ENUM(NSUInteger, RTKErrorCode) {
     // MARK: - deprecated error code begin
     RTKErrorNotAvailable = 100,
     RTKErrorTimeout,        ///< Generic operation timeout, 
@@ -46,7 +46,7 @@ typedef enum : NSUInteger {
     RTKErrorAttemptTimeout = RTKErrorTimeout,             ///< Attempt failed due to time out.
     
     RTKErrorInvalidOperation,                       ///< The operation can not be performed.
-    RTKErrorTransportBusy,                          ///< The transport is in some process.
+    RTKErrorTransportBusy,                          ///< The transport is busy with some task..
     
     RTKErrorDeviceConnectionFail,               ///< Connect to device failed.
     RTKErrorDeviceValidation,                   ///< Validate device failed.
@@ -70,7 +70,11 @@ typedef enum : NSUInteger {
     RTKErrorAccessorySessionNotOpen,      ///< Communication session with iAP accessory is not open.
     RTKErrorOperationNotSupport,
     RTKErrorAccessoryDisconnected,          ///< Th accessory is disconnected unexpected.
-} RTKErrorCode;
+    
+    RTKErrorGATTAttributeLack,          ///< Operation fails due to required GATT attribute not exist
+    
+    RTKErrorTransportBecomeUnavailable,     ///< The transport is now unable to transfer data.
+} ;
 
 
 
