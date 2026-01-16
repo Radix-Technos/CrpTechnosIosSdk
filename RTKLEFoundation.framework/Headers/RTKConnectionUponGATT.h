@@ -18,97 +18,82 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/// The controllers on which a GATT connection could be operatable..
-typedef NS_ENUM(NSUInteger, RTKDeviceGATTOverTransport) {
-    RTKDeviceGATTOverTransport_unknown  = 0x00,     /// Which transport a GATT connection could operates on is not determined currently.
-    RTKDeviceGATTOverTransport_LE,                  /// The GATT connection operates using LE.
-    RTKDeviceGATTOverTransport_BREDR,               /// The GATT connection operates using BREDR.
-    RTKDeviceGATTOverTransport_BREDRLE,             /// The GATT connection operates using BREDR or LE. This means the BREDR and LE controllers are all enabled in the device, and GATT could operates on both controller.
-    RTKDeviceGATTOverTransport_LEDeterminedBREDRNot,    /// The GATT connection could operates using LE, but whether using BREDR is not determined.
-};
-
 @class RTKConnectionUponGATT;
 
-/// Methods that an ``RTKConnectionUponGATT`` calls on its delegate to report events.
+/**
+ * A protocol defines optional methods for receiving GATT peripheral state update notifications.
+ */
 @protocol RTKConnectionUponGATTDelegate <RTKProfileConnectionDelegate>
 @optional
 
-/// Tells the delegate that the `GATT` peripheral that a connection link with did change its name.
-///
-/// - Parameter connection: The connection object that sends this notification.
+/**
+ * Tells the delegate that GATT peripheral that a connection link with did change its name.
+ *
+ * @param connection The connection object that sends this notification.
+ */
 - (void)GATTConnectionDidUpdatePeripheralName:(RTKConnectionUponGATT *)connection;
 
-/// Tells the delegate that the masured rssi value changes of GATT peripheral that a connection link with.
-///
-/// - Parameter connection: The connection object that sends this notification.
-/// - Parameter RSSI: The RSSI, in decibels, of the peripheral.
-/// - Parameter error: The reason the ``RTKConnectionUponGATT/readPeripheralRSSI`` call failed, or nil if no error occurred.
+/**
+ * Tells the delegate that the masured rssi value changes of GATT peripheral that a connection link with.
+ *
+ * @param connection The connection object that sends this notification.
+ */
 - (void)GATTConnection:(RTKConnectionUponGATT *)connection didReadPeripheralRSSI:(NSNumber *)RSSI error:(nullable NSError *)error;
 
 @end
 
 
-/// A concrete device connection that communicates with a GATT peripheral.
-///
-/// For communicating with peripheral, this object set itself as the delegate of the `CBPeripheral` object. So if you create this object, you should not set peripheral's delegate, nor call any `CBPeripheral` methods that will make communication with device. If you really need to, you should ensure the delegate methods of this connection be called correctly.
+/**
+ * A concrete device connection that communicates with a GATT peripheral.
+ *
+ * @discussion For communicating with peripheral, this object set itself as the delegate of the CBPeripheral object. So if you create this object, you should not set peripheral's delegate, nor call any CBPeripheral methods that will make communication with device. If you really need to, you should ensure the delegate methods of this connection be called correctly.
+ */
 @interface RTKConnectionUponGATT : RTKProfileConnection <CBPeripheralDelegate>
 
-
 // MARK: - Matching options for discovery or detection
-
-/// Returns a list of service uuids that one service is contained that a qualified LE peripheral is advertising.
-///
-/// An ``RTKProfileConnectionManager`` may use this value when scaning for peripherals, a peripheral adverising
-///
-/// When subclass this class, you typically override this method and return a meaningful list.
+/**
+ * Returns an array of service uuids that one service is contained that a qualified LE peripheral is advertising.
+ *
+ * @discussion A RTKProfileConnectionManager may use this value when scaning for peripherals, a peripheral adverising
+ *
+ * When subclass this class, you typically override this method and return a meaningful list.
+ */
 @property (readonly, class, nullable) NSArray <CBUUID *> *serviceUUIDsInADV;
 
-
-/// Returns an array of service uuids that can be used to identfier peripherals.
-///
-/// An ``RTKProfileConnectionManager`` may uses this property for retrieving connected device or observing connection events.
-///
-/// When you subclass this class, you typically override this method and return a meaningful value.
+/**
+ * Returns an array of service uuids that can be used to identfier peripherals.
+ *
+ * @discussion A RTKProfileConnectionManager may uses this property for retrieving connected device or observing connection events.
+ * When you subclass this class, you typically override this method and return a meaningful value.
+ */
 @property (readonly, class, nullable) NSArray <CBUUID *> *interestedServiceUUIDs;
 
-// MARK: -
 
-/// Initializes the connection object with a peripheral object.
-///
-/// The peripheral does not need to be in connected state.
-///
-/// After call this method, you shall not call any methods of the peripheral object.
+/**
+ * Initializes the connection object with a peripheral object.
+ *
+ * @discussion The peripheral does not need to be in connected state.
+ * @discussion After call this method, you shall not call any methods of the peripheral object.
+ */
 - (instancetype)initWithPeripheral:(CBPeripheral *)peripheral;
 
-
-/// Returns the GATT peripheral object that this connection links.
+/**
+ * Returns the GATT peripheral object that this connection links.
+ */
 @property (readonly) CBPeripheral *peripheral;
 
-
-/// The delegate object that you want to receive peripheral events.
+/**
+ * The delegate object that you want to receive peripheral events.
+ */
 @property (weak, nonatomic, nullable) id<RTKConnectionUponGATTDelegate> delegate;
 
 
-/// Start monitoring the measured `RSSI` of the connected peripheral.
-///
-/// When a new RSSI value is measured, this connection calls ``RTKConnectionUponGATTDelegate/GATTConnection:didReadPeripheralRSSI:error:`` on its delegate object.
+/**
+ * Start monitoring the measured RSSI of the connected peripheral.
+ *
+ * @discussion When a new RSSI value is measured, this connection calls @c -GATTConnectionDidUpdatePeripheralRSSI: on its delegate object.
+ */
 - (void)readPeripheralRSSI;
-
-/// Communicate with the device to get the state of its battery level.
-///
-/// - Parameter handler: The block to be invoked when the task completes.
-- (void)getBatteryLevelWithCompletionHandler:(nullable void(^)(BOOL success, NSError *error, RTKBatteryLevel level))handler;
-
-/// The controller type this GATT connection could operates on.
-@property (readonly) RTKDeviceGATTOverTransport overTransport;
-
-/// Set the controller type.
-///
-/// In normal, you use the ``-getDeviceInfoWithCompletionHandler:`` to ask the device for the transport information. But sometimes, when the GATT connection is instantiated and the link may not be established, you can use a previous determined type and assign it to the connection, assumping the Controller of a device never changes. Care should be taken to specify the correct controller information.
-- (void)setTranport:(RTKDeviceGATTOverTransport)transport;
-
-/// Communicates with the device to ask for the device information which indicates which Controller could be used for GATT operations.
-- (void)getDeviceInfoWithCompletionHandler:(nullable void(^)(BOOL success, NSError *error, RTKDeviceGATTOverTransport transport))handler;
 
 @end
 
@@ -116,12 +101,6 @@ typedef NS_ENUM(NSUInteger, RTKDeviceGATTOverTransport) {
 
 @interface RTKConnectionUponGATT (AttributeDiscovery)
 
-/// Start discovering a GATT service which has the specified UUID.
-///
-/// - Parameter serviceUUID: The UUID which the service to be discovered uses.
-/// - Parameter handler: The completion handler to be invoked when task finishes.
-///
-/// If the discovery succeeds, you use ``serviceWithID:`` to obtain the service object. `5` seconds is used as time out interval.
 - (void)discoverServiceWithID:(CBUUID *)serviceUUID withCompletionHandler:(void(^)(BOOL success, NSError *_Nullable error))handler;
 
 /**
@@ -132,36 +111,42 @@ typedef NS_ENUM(NSUInteger, RTKDeviceGATTOverTransport) {
  */
 //- (void)discoverCharacteristicsWithIDDictionary:(NSDictionary *)dict completionHandler:(void(^)(BOOL success, NSError *_Nullable error))handler;
 
-
-/// Discovers the specified service and its containing charactersitics.
-///
-/// - Parameter serviceID: The UUID string which identifies the type of service you want to discover.
-/// - Parameter characteristicIDs: An list of UUID strings that each represents a UUID that identifies the type of characteristic you want to discover.
-/// - Parameter handler: The block to be called when discovery complete successfully or unsuccessfully.
-///
-/// This method executes asynchronously. When the service and all characteristics you want to discover is all discovered, it calls handler block with success set to `YES` and error set to `nil`. You can access discovered service and characteristic through ``RTKConnectionUponGATT/serviceWithID:`` and ``RTKConnectionUponGATT/characteristicOfID:inService:`` methods. If the service or any characteristic is not discovered within a specific time, it calls the handler block with success set to `NO` and error set to a `NSError` object whose domain is ``RTKBTErrorDomain`` and code is ``RTKErrorCode/RTKErrorGATTAttributeDiscoveryTimeout``. The default timeout interval is `5` seconds.
+/**
+ * Discovers the specified service and its containing charactersitics.
+ *
+ * @param serviceID The UUID string which identifies the type of service you want to discover.
+ * @param characteristicIDs An list of UUID strings that each represents a UUID that identifies the type of characteristic you want to discover.
+ * @param handler The block to be called when discovery complete successfully or unsuccessfully.
+ *
+ * @discussion This method executes asynchronously. When the service and all characteristics you want to discover is all discovered, it calls handler block with success set to YES and error set to nil. You can access discovered service and characteristic through @c -serviceWithID: and @c -characteristicOfID:inService: methods. If the service or any characteristic is not discovered within a specific time, it calls the handler block with success set to NO and error set to a NSError object whose domain is RTKBTErrorDomain and code is RTKErrorATTDiscoveryTimeout. The default timeout interval is 5 seconds.
+ * @see @c -discoverService:containingCharacteristics:timeout:completionHandler:
+ */
 - (void)discoverService:(NSString *)serviceID containingCharacteristics:(nullable NSArray <NSString*>*)characteristicIDs withCompletionHandler:(void(^)(BOOL success, NSError *_Nullable error))handler;
 
 
-/// Discovers the specified service and its containing charactersitics within a specific timeout interval.
-///
-/// - Parameter serviceID: The UUID string which identifies the type of service you want to discover.
-/// - Parameter characteristicIDs: An list of UUID strings that each represents a UUID that identifies the type of characteristic you want to discover.
-/// - Parameter handler: The block to be called when discovery complete successfully or unsuccessfully.
-///
-/// This method executes asynchronously. When the service and all characteristics you want to discover is all discovered, it calls handler block with success set to `YES` and error set to `nil`. You can access discovered service and characteristic through ``RTKConnectionUponGATT/serviceWithID:`` and ``RTKConnectionUponGATT/characteristicOfID:inService:`` methods. If the service or any characteristic is not discovered within a specific time, it calls the handler block with success set to `NO` and error set to a `NSError` object whose domain is ``RTKBTErrorDomain`` and code is ``RTKErrorCode/RTKErrorGATTAttributeDiscoveryTimeout``.
+/**
+ * Discovers the specified service and its containing charactersitics within a specific timeout interval.
+ *
+ * @param serviceID The UUID string which identifies the type of service you want to discover.
+ * @param characteristicIDs An list of UUID strings that each represents a UUID that identifies the type of characteristic you want to discover.
+ * @param handler The block to be called when discovery complete successfully or unsuccessfully.
+ *
+ * @discussion This method executes asynchronously. When the service and all characteristics you want to discover is all discovered, it calls handler block with success set to YES and error set to nil. You can access discovered service and characteristic through @c -serviceWithID: and @c -characteristicOfID:inService: methods. If the service or any characteristic is not discovered within a specific time, it calls the handler block with success set to NO and error set to a NSError object whose domain is RTKBTErrorDomain and code is RTKErrorATTDiscoveryTimeout.
+ */
 - (void)discoverService:(NSString *)serviceID containingCharacteristics:(nullable NSArray <NSString*>*)characteristicIDs timeout:(NSTimeInterval)timeout withCompletionHandler:(void(^)(BOOL success, NSError *_Nullable error))handler;
 
-
-/// Returns the discovered service object which is identifiered by the specific service UUID.
-///
-/// - Returns `nil` if the service is not discovered.
+/**
+ * Returns the discovered service object which is identifiered by the specific service UUID.
+ *
+ * @return Returns nil if the service is not discovered.
+ */
 - (nullable CBService *)serviceWithID:(NSString *)serviceID;
 
-
-/// Returns the discovered characteristic object which is identifiered by the specific characteristic UUID and service UUID.
-///
-/// - Returns `nil` if the characteristic is not discovered.
+/**
+ * Returns the discovered characteristic object which is identifiered by the specific characteristic UUID and service UUID.
+ *
+ * @return Returns nil if the characteristic is not discovered.
+ */
 - (nullable CBCharacteristic *)characteristicOfID:(NSString *)charID inService:(NSString *)serviceID;
 
 @end
@@ -169,22 +154,39 @@ typedef NS_ENUM(NSUInteger, RTKDeviceGATTOverTransport) {
 
 @interface RTKConnectionUponGATT(CharacteristicReadWrite)
 
-/// Makes an ``RTKCharacteristicRead`` conformed object to receive notification when the specific characteristic value did read successfully or unsuccessfully.
+/**
+ * Makes a @c RTKCharacteristicRead conformed object to receive notification when the specific characteristic value did read successfully or unsuccessfully.
+ *
+ * @discussion The specific characteristic is indicated through reader's readCharacteristic property.
+ */
 - (void)registerCharacteristicReader:(id <RTKCharacteristicRead>)reader;
 
-/// Stops an ``RTKCharacteristicRead`` conformed object to receive notification when the specific characteristic value did read successfully or unsuccessfully.
+/**
+ * Stops a @c RTKCharacteristicRead conformed object to receive notification when the specific characteristic value did read successfully or unsuccessfully.
+ */
 - (void)unregisterCharacteristicReader:(id <RTKCharacteristicRead>)reader;
 
-/// Makes an ``RTKCharacteristicNotificationRecept`` conformed object to receive notification when the specific characteristic updates its notification state or its value.
+/**
+ * Makes a @c RTKCharacteristicNotificationRecept conformed object to receive notification when the specific characteristic updates its notification state or its value.
+ * @discussion The specific characteristic is indicated through reader's readCharacteristic property.
+ */
 - (void)registerCharacteristicNotificationReceptor:(id <RTKCharacteristicNotificationRecept>)receptor;
 
-/// Stops an ``RTKCharacteristicNotificationRecept`` conformed object to receive notification when the specific characteristic updates its notification state or its value.
+/**
+ * Stops a @c RTKCharacteristicNotificationRecept conformed object to receive notification when the specific characteristic updates its notification state or its value.
+ */
 - (void)unregisterCharacteristicNotificationReceptor:(id <RTKCharacteristicNotificationRecept>)receptor;
 
-/// Makes an ``RTKCharacteristicWrite`` conformed object to receive notification when receives the specific characteristic value write response.
+/**
+ * Makes a @c RTKCharacteristicWrite conformed object to receive notification when receives the specific characteristic value write response.
+ *
+ * @discussion The specific characteristic is indicated through reader's readCharacteristic property.
+ */
 - (void)registerCharacteristicWriter:(id <RTKCharacteristicWrite>)writer;
 
-/// Stops an ``RTKCharacteristicWrite`` conformed object to receive notification when receives the specific characteristic value write response.
+/**
+ * Stops a @c RTKCharacteristicWrite conformed object to receive notification when receives the specific characteristic value write response.
+ */
 - (void)unregisterCharacteristicWriter:(id <RTKCharacteristicWrite>)writer;
 
 @end
