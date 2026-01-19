@@ -2126,7 +2126,8 @@ typedef SWIFT_ENUM(NSInteger, CRPOptionsExerciseType, open) {
   CRPOptionsExerciseTypeTapdance = 150,
   CRPOptionsExerciseTypeTecido_acrobatico = 151,
   CRPOptionsExerciseTypeWindsurfing = 152,
-  CRPOptionsExerciseTypeNone = 153,
+  CRPOptionsExerciseTypeSup = 153,
+  CRPOptionsExerciseTypeNone = 154,
 };
 
 typedef SWIFT_ENUM(NSInteger, CRPPairState, open) {
@@ -4008,6 +4009,7 @@ typedef SWIFT_ENUM(NSInteger, SportType, open) {
   SportTypeTapdance = 150,
   SportTypeTecido_acrobatico = 151,
   SportTypeWindsurfing = 152,
+  SportTypeSUP = 153,
   SportTypeProceed = 253,
   SportTypePause = 254,
   SportTypeEnd = 255,
