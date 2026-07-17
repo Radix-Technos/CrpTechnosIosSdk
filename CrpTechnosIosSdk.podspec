@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'CrpTechnosIosSdk'
-  s.version          = '2.0.11'
+  s.version          = '2.0.12'
   s.summary          = 'CRP frameworks.'
 
 # This description is used to generate tags and improve search results.
@@ -30,7 +30,7 @@ Pod::Spec.new do |s|
   # s.swift_version = '5.0'
   
   # 上传framewrok
-  s.vendored_frameworks = 'CRPSmartBand.framework', 'OTAFramework.framework', 'SpeexKit.framework', 'JLBmpConvertKit.framework', 'JLLogHelper.framework'
+  s.vendored_frameworks = 'CRPSmartBand.framework', 'OTAFramework.framework', 'SpeexKit.framework'
   s.vendored_libraries = 'libopus.a'
 
   # 上传源文件
@@ -43,6 +43,10 @@ Pod::Spec.new do |s|
   # s.public_header_files = 'Pod/Classes/**/*.h'
    s.frameworks = 'UIKit', 'Foundation', 'CoreBluetooth'
   #  s.libraries  = 'sqlite3.0'
+  # NOTA: o CRPSmartBand carrega JLBmpConvertKit e JLLogHelper (@rpath). Esses frameworks
+  # JieLi NÃO são mais empacotados aqui para evitar cópias duplicadas/desatualizadas — são
+  # fornecidos pelo pod iOSOTAJL (>= 1.2.5), declarado centralmente no react-native-technos-ware-core.
+  # Consumidores deste pod devem garantir o iOSOTAJL >= 1.2.5 no seu Podfile.
   # s.dependency 'AFNetworking', '~> 2.3'
-  
+
 end
